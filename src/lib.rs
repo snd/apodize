@@ -11,26 +11,6 @@ pub struct CosineWindowIter {
     size: usize,
 }
 
-impl CosineWindowIter {
-    /// the value of the cosine window of size `size`
-    /// with the coefficients `a`, `b`, `c` and `d`
-    /// at index `index`
-    /// TODO find better name
-    #[inline]
-    pub fn value_at_index(a: Float,
-                          b: Float,
-                          c: Float,
-                          d: Float,
-                          size: usize,
-                          index: usize)
-                          -> Float {
-        let x = (PI * index as f64) / (size - 1) as f64;
-        let b_ = b * (2. * x).cos();
-        let c_ = c * (4. * x).cos();
-        let d_ = d * (6. * x).cos();
-        (a - b_) + (c_ - d_)
-    }
-}
 
 impl Iterator for CosineWindowIter {
     type Item = Float;
@@ -41,13 +21,32 @@ impl Iterator for CosineWindowIter {
         }
         let index = self.index;
         self.index += 1;
-        Some(CosineWindowIter::value_at_index(self.a,
-                                              self.b,
-                                              self.c,
-                                              self.d,
-                                              self.size,
-                                              index))
+        Some(cosine_window_value_at_index(self.a,
+                                          self.b,
+                                          self.c,
+                                          self.d,
+                                          self.size,
+                                          index))
     }
+}
+
+/// the value of the cosine window of size `size`
+/// with the coefficients `a`, `b`, `c` and `d`
+/// at index `index`
+/// TODO find better name
+#[inline]
+pub fn cosine_window_value_at_index(a: Float,
+                                    b: Float,
+                                    c: Float,
+                                    d: Float,
+                                    size: usize,
+                                    index: usize)
+                                    -> Float {
+    let x = (PI * index as f64) / (size - 1) as f64;
+    let b_ = b * (2. * x).cos();
+    let c_ = c * (4. * x).cos();
+    let d_ = d * (6. * x).cos();
+    (a - b_) + (c_ - d_)
 }
 
 /// https://en.wikipedia.org/wiki/Window_function#Cosine_window

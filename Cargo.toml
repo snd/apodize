@@ -1,0 +1,7 @@
+[package]
+authors = ["Maximilian Krüger <kruemaxi@gmail.com>"]
+name = "apodize"
+version = "1.0.0"
+
+[dev-dependencies]
+nalgebra = "0.4.0"

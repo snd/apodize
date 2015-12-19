@@ -1,21 +1,24 @@
-use std::f64::consts::PI;
+//! this is the module documentation
 
-pub type Float = f64;
+extern crate num;
+use num::traits::Float;
 
-pub struct CosineWindowIter {
-    a: Float,
-    b: Float,
-    c: Float,
-    d: Float,
+pub mod pi;
+use pi::Pi;
+
+pub struct CosineWindowIter<T> {
+    a: T,
+    b: T,
+    c: T,
+    d: T,
     index: usize,
     size: usize,
 }
 
+impl<T: Float + Pi> Iterator for CosineWindowIter<T> {
+    type Item = T;
 
-impl Iterator for CosineWindowIter {
-    type Item = Float;
-
-    fn next(&mut self) -> Option<Float> {
+    fn next(&mut self) -> Option<T> {
         if self.index == self.size {
             return None;
         }
@@ -35,50 +38,51 @@ impl Iterator for CosineWindowIter {
 /// at index `index`
 /// TODO find better name
 #[inline]
-pub fn cosine_window_value_at_index(a: Float,
-                                    b: Float,
-                                    c: Float,
-                                    d: Float,
-                                    size: usize,
-                                    index: usize)
-                                    -> Float {
-    let x = (PI * index as f64) / (size - 1) as f64;
-    let b_ = b * (2. * x).cos();
-    let c_ = c * (4. * x).cos();
-    let d_ = d * (6. * x).cos();
-    ((a - b_) + (c_ - d_)).max(0.)
-}
+pub fn cosine_window_value_at_index<T: Float + Pi>(a: T,
+                                                   b: T,
+                                                   c: T,
+                                                   d: T,
+                                                   size: usize,
+                                                   index: usize)
+    -> T {
+        let pi: T = T::pi();
+        let x: T = (pi * T::from(index).unwrap()) / T::from(size - 1).unwrap();
+        let b_ = b * (T::from(2.).unwrap() * x).cos();
+        let c_ = c * (T::from(4.).unwrap() * x).cos();
+        let d_ = d * (T::from(6.).unwrap() * x).cos();
+        ((a - b_) + (c_ - d_)).max(T::from(0.).unwrap())
+    }
 
 /// https://en.wikipedia.org/wiki/Window_function#Cosine_window
-pub fn cosine(a: Float,
-              b: Float,
-              c: Float,
-              d: Float,
-              size: usize)
-              -> CosineWindowIter {
-    assert!(size > 1);
-    CosineWindowIter {
-        a: a,
-        b: b,
-        c: c,
-        d: d,
-        index: 0,
-        size: size,
+pub fn cosine<T: Float + Pi>(a: T,
+                             b: T,
+                             c: T,
+                             d: T,
+                             size: usize)
+    -> CosineWindowIter<T> {
+        assert!(size > 1);
+        CosineWindowIter {
+            a: a,
+            b: b,
+            c: c,
+            d: d,
+            index: 0,
+            size: size,
+        }
     }
+
+pub fn hanning<T: Float + Pi>(size: usize) -> CosineWindowIter<T> {
+    cosine::<T>(T::from(0.5).unwrap(), T::from(0.5).unwrap(), T::from(0.).unwrap(), T::from(0.).unwrap(), size)
 }
 
-pub fn hanning(size: usize) -> CosineWindowIter {
-    cosine(0.5, 0.5, 0., 0., size)
+pub fn hamming<T: Float + Pi>(size: usize) -> CosineWindowIter<T> {
+    cosine::<T>(T::from(0.54).unwrap(), T::from(0.46).unwrap(), T::from(0.).unwrap(), T::from(0.).unwrap(), size)
 }
 
-pub fn hamming(size: usize) -> CosineWindowIter {
-    cosine(0.54, 0.46, 0., 0., size)
+pub fn blackman<T: Float + Pi>(size: usize) -> CosineWindowIter<T> {
+    cosine::<T>(T::from(0.35875).unwrap(), T::from(0.48829).unwrap(), T::from(0.14128).unwrap(), T::from(0.01168).unwrap(), size)
 }
 
-pub fn blackman(size: usize) -> CosineWindowIter {
-    cosine(0.35875, 0.48829, 0.14128, 0.01168, size)
-}
-
-pub fn nuttall(size: usize) -> CosineWindowIter {
-    cosine(0.355768, 0.487396, 0.144232, 0.012604, size)
+pub fn nuttall<T: Float + Pi>(size: usize) -> CosineWindowIter<T> {
+    cosine::<T>(T::from(0.355768).unwrap(), T::from(0.487396).unwrap(), T::from(0.144232).unwrap(), T::from(0.012604).unwrap(), size)
 }

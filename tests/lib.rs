@@ -48,6 +48,22 @@ fn test_hanning() {
                                             &expected[..]),
                            hanning(10).collect::<DVec<Float>>(),
                            10);
+
+    let expected: Vec<Float> = vec![0.0,
+                                    0.09549150281252627,
+                                    0.3454915028125263,
+                                    0.6545084971874737,
+                                    0.9045084971874737,
+                                    1.0,
+                                    0.9045084971874737,
+                                    0.6545084971874737,
+                                    0.3454915028125264,
+                                    0.09549150281252633,
+                                    0.0];
+    assert_approx_eq_ulps!(DVec::from_slice(expected.len(),
+                                            &expected[..]),
+                           hanning(11).collect::<DVec<Float>>(),
+                           10);
 }
 
 #[test]

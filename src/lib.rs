@@ -46,7 +46,7 @@ pub fn cosine_window_value_at_index(a: Float,
     let b_ = b * (2. * x).cos();
     let c_ = c * (4. * x).cos();
     let d_ = d * (6. * x).cos();
-    (a - b_) + (c_ - d_)
+    ((a - b_) + (c_ - d_)).max(0.)
 }
 
 /// https://en.wikipedia.org/wiki/Window_function#Cosine_window

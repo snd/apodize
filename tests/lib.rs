@@ -118,22 +118,19 @@ fn test_blackman() {
 
 #[test]
 fn test_nuttall() {
-    let expected: Vec<Float> = vec![-0.000000000000000027755575615628914,
-                                    -0.000000000000000027755575615628914];
+    let expected: Vec<Float> = vec![0.0, 0.0];
     assert_approx_eq_ulps!(DVec::from_slice(expected.len(),
                                             &expected[..]),
                            nuttall(2).collect::<DVec<Float>>(),
                            10);
 
-    let expected: Vec<Float> = vec![-0.000000000000000027755575615628914,
-                                    1.0,
-                                    -0.000000000000000027755575615628914];
+    let expected: Vec<Float> = vec![0.0, 1.0, 0.0];
     assert_approx_eq_ulps!(DVec::from_slice(expected.len(),
                                             &expected[..]),
                            nuttall(3).collect::<DVec<Float>>(),
                            10);
 
-    let expected: Vec<Float> = vec![-0.000000000000000027755575615628914,
+    let expected: Vec<Float> = vec![0.0,
                                     0.013748626562839233,
                                     0.14190082671665563,
                                     0.5147459999999997,
@@ -142,7 +139,7 @@ fn test_nuttall() {
                                     0.5147460000000003,
                                     0.14190082671665577,
                                     0.013748626562839275,
-                                    -0.000000000000000027755575615628914];
+                                    0.0];
     assert_approx_eq_ulps!(DVec::from_slice(expected.len(),
                                             &expected[..]),
                            nuttall(10).collect::<DVec<Float>>(),

@@ -54,7 +54,7 @@ fn main() {
 extern crate num;
 use num::traits::Float;
 
-/// helper shorthand macro for shorter more readable code:
+/// helper shorthand macro for shorter, more readable code:
 /// `from!(T, x)` -> `T::from(x).unwrap()`
 #[macro_export]
 macro_rules! from {
@@ -62,7 +62,7 @@ macro_rules! from {
 }
 
 /// build an `nalgebra::DVec` as easy as a `std::Vec`.
-/// for shorter more readable code in tests and examples.
+/// for shorter, more readable code in tests and examples.
 #[macro_export]
 macro_rules! dvec {
     ($( $x:expr ),*) => { DVec {at: vec![$($x),*]} };

@@ -5,6 +5,4 @@ version = "0.1.0"
 
 [dependencies]
 num = "0.1.29"
-
-[dev-dependencies]
 nalgebra = "0.4.0"

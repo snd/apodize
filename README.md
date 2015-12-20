@@ -12,12 +12,11 @@ and
 [nuttall](https://snd.github.io/apodize/apodize/fn.nuttall_iter.html)
 windows**
 
-### [link to generated documentation (rustdoc)](https://snd.github.io/apodize/apodize/index.html)
+### [generated documentation](https://snd.github.io/apodize/apodize/index.html)
 
-you will most likely want to collect
-and then multiply that vector with some data
-
+<!--
 generic over type of floating point number yielded (f32 or f64).
+-->
 
 example for a hanning window (hamming, blackman and nuttall are analogous):
 ```rust

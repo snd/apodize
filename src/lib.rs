@@ -1,5 +1,9 @@
 /*!
 
+iterators that yield generalized cosine, hanning, hamming, blackman and nuttall windows
+
+example for a hanning window (hamming, blackman and nuttall are analogous):
+
 ```
 use std::ops::Mul;
 
@@ -7,40 +11,41 @@ use std::ops::Mul;
 extern crate nalgebra;
 use nalgebra::{ApproxEq, DVec};
 
+#[macro_use]
 extern crate apodize;
-use apodize::{hanning};
+use apodize::{hanning_iter};
 
 fn main() {
-    let data: DVec<f64> = vec![1., 2., 3., 4., 5., 6., 7.].iter().map(|x| *x).collect();
+    let data: DVec<f64> = dvec![1., 2., 3., 4., 5., 6., 7.];
 
     let size = 7;
-    let window = hanning::<f64>(size).collect::<DVec<f64>>();
+    let window = hanning_iter::<f64>(size).collect::<DVec<f64>>();
 
     assert_approx_eq_ulps!(
-        vec![
+        window,
+        dvec![
             0.0,
             0.24999999999999994,
             0.7499999999999999,
             1.0,
             0.7500000000000002,
             0.25,
-            0.0].iter().map(|x| *x).collect(),
-        window,
+            0.0],
         10);
 
     // apply window to data
     let windowed_data = window.mul(data);
 
     assert_approx_eq_ulps!(
-        vec![
+        windowed_data,
+        dvec![
             0.0,
             0.4999999999999999,
             2.2499999999999996,
             4.0,
             3.750000000000001,
             1.5,
-            0.0].iter().map(|x| *x).collect(),
-        windowed_data,
+            0.0],
         10);
 }
 ```
@@ -48,6 +53,21 @@ fn main() {
 
 extern crate num;
 use num::traits::Float;
+
+/// helper shorthand macro for shorter more readable code:
+/// `from!(T, x)` -> `T::from(x).unwrap()`
+#[macro_export]
+macro_rules! from {
+    ($typ:ty, $val:expr) => { <$typ>::from($val).unwrap() }
+}
+
+/// build an `nalgebra::DVec` as easy as a `std::Vec`.
+/// for shorter more readable code in tests and examples.
+#[macro_export]
+macro_rules! dvec {
+    ($( $x:expr ),*) => { DVec {at: vec![$($x),*]} };
+    ($($x:expr,)*) => { dvec![$($x),*] };
+}
 
 /// the constant pi for generic floating point types.
 /// workaround until [associated
@@ -110,17 +130,17 @@ pub fn cosine_at<T: Float + CanRepresentPi>(a: T,
                                                    index: usize)
     -> T {
         let pi: T = T::pi();
-        let x: T = (pi * T::from(index).unwrap()) / T::from(size - 1).unwrap();
-        let b_ = b * (T::from(2.).unwrap() * x).cos();
-        let c_ = c * (T::from(4.).unwrap() * x).cos();
-        let d_ = d * (T::from(6.).unwrap() * x).cos();
+        let x: T = (pi * from!(T, index)) / from!(T, size - 1);
+        let b_ = b * (from!(T, 2.) * x).cos();
+        let c_ = c * (from!(T, 4.) * x).cos();
+        let d_ = d * (from!(T, 6.) * x).cos();
         (a - b_) + (c_ - d_)
     }
 
 /// returns an iterator that yields the values for a [cosine
 /// window](https://en.wikipedia.org/wiki/Window_function#Hann_.28Hanning.29_window) of `size`
 /// with the coefficients `a`, `b`, `c` and `d`
-pub fn cosine<T: Float + CanRepresentPi>(a: T,
+pub fn cosine_iter<T: Float + CanRepresentPi>(a: T,
                              b: T,
                              c: T,
                              d: T,
@@ -139,24 +159,44 @@ pub fn cosine<T: Float + CanRepresentPi>(a: T,
 
 /// returns an iterator that yields the values for a [hanning
 /// window](https://en.wikipedia.org/wiki/Window_function#Hann_.28Hanning.29_window) of `size`
-pub fn hanning<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<T> {
-    cosine::<T>(T::from(0.5).unwrap(), T::from(0.5).unwrap(), T::from(0.).unwrap(), T::from(0.).unwrap(), size)
+pub fn hanning_iter<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<T> {
+    cosine_iter::<T>(
+        from!(T, 0.5),
+        from!(T, 0.5),
+        from!(T, 0.),
+        from!(T, 0.),
+        size)
 }
 
 /// returns an iterator that yields the values for a [hamming
 /// window](https://en.wikipedia.org/wiki/Window_function#Hamming_window) of `size`
-pub fn hamming<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<T> {
-    cosine::<T>(T::from(0.54).unwrap(), T::from(0.46).unwrap(), T::from(0.).unwrap(), T::from(0.).unwrap(), size)
+pub fn hamming_iter<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<T> {
+    cosine_iter::<T>(
+        from!(T, 0.54),
+        from!(T, 0.46),
+        from!(T, 0.),
+        from!(T, 0.),
+        size)
 }
 
 /// returns an iterator that yields the values for a [blackman
 /// window](https://en.wikipedia.org/wiki/Window_function#Blackman_windows) of `size`
-pub fn blackman<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<T> {
-    cosine::<T>(T::from(0.35875).unwrap(), T::from(0.48829).unwrap(), T::from(0.14128).unwrap(), T::from(0.01168).unwrap(), size)
+pub fn blackman_iter<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<T> {
+    cosine_iter::<T>(
+        from!(T, 0.35875),
+        from!(T, 0.48829),
+        from!(T, 0.14128),
+        from!(T, 0.01168),
+        size)
 }
 
 /// returns an iterator that yields the values for a [nuttall
 /// window](https://en.wikipedia.org/wiki/Window_function#Nuttall_window.2C_continuous_first_derivative) of `size`
-pub fn nuttall<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<T> {
-    cosine::<T>(T::from(0.355768).unwrap(), T::from(0.487396).unwrap(), T::from(0.144232).unwrap(), T::from(0.012604).unwrap(), size)
+pub fn nuttall_iter<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<T> {
+    cosine_iter::<T>(
+        from!(T, 0.355768),
+        from!(T, 0.487396),
+        from!(T, 0.144232),
+        from!(T, 0.012604),
+        size)
 }

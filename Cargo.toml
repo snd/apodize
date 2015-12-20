@@ -2,6 +2,14 @@
 authors = ["Maximilian Krüger <kruemaxi@gmail.com>"]
 name = "apodize"
 version = "0.1.0"
+description = "iterators that yield generalized cosine, hanning, hamming, blackman and nuttall windows"
+documentation = "https://snd.github.io/apodize/apodize/index.html"
+homepage = "https://github.com/snd/apodize"
+repository = "https://github.com/snd/apodize.git"
+readme = "README.md"
+keywords = ["iterator", "window", "hanning", "hamming", "blackman", "nuttall", "apodization"]
+license = "MIT"
+license_file = "LICENSE"
 
 [dependencies]
 num = "0.1.29"

@@ -1,5 +1,50 @@
-//! this is the module documentation
+/*!
 
+```
+use std::ops::Mul;
+
+#[macro_use]
+extern crate nalgebra;
+use nalgebra::{ApproxEq, DVec};
+
+extern crate apodize;
+use apodize::{hanning};
+
+fn main() {
+    let data: DVec<f64> = vec![1., 2., 3., 4., 5., 6., 7.].iter().map(|x| *x).collect();
+
+    let size = 7;
+    let window = hanning::<f64>(size).collect::<DVec<f64>>();
+
+    assert_approx_eq_ulps!(
+        vec![
+            0.0,
+            0.24999999999999994,
+            0.7499999999999999,
+            1.0,
+            0.7500000000000002,
+            0.25,
+            0.0].iter().map(|x| *x).collect(),
+        window,
+        10);
+
+    // apply window to data
+    let windowed_data = window.mul(data);
+
+    assert_approx_eq_ulps!(
+        vec![
+            0.0,
+            0.4999999999999999,
+            2.2499999999999996,
+            4.0,
+            3.750000000000001,
+            1.5,
+            0.0].iter().map(|x| *x).collect(),
+        windowed_data,
+        10);
+}
+```
+*/
 extern crate num;
 use num::traits::Float;
 

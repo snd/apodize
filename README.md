@@ -5,6 +5,8 @@
 
 **iterators that yield generalized cosine, hanning, hamming, blackman and nuttall windows**
 
+[documentation](https://snd.github.io/apodize/apodize/index.html)
+
 ```rust
 use std::ops::Mul;
 

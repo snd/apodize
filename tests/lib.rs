@@ -1,36 +1,37 @@
+#[macro_use]
 extern crate apodize;
-use apodize::{blackman, hamming, hanning, nuttall};
+use apodize::{blackman_iter, hamming_iter, hanning_iter, nuttall_iter};
 
 #[macro_use]
 extern crate nalgebra;
 use nalgebra::{ApproxEq, DVec};
 
+const UNITS_IN_LAST_PLACE: u32 = 10;
+
 #[test]
 #[should_panic]
 fn test_panic_too_short() {
-    let _ = hanning::<f64>(1);
+    let _ = hanning_iter::<f64>(1);
 }
 
 #[test]
 fn test_hanning() {
-    let expected: Vec<f64> = vec![
-        0.0,
-        0.0,
-    ];
-    assert_approx_eq_ulps!(DVec::from_slice(expected.len(),
-                                            &expected[..]),
-                           hanning(2).collect::<DVec<f64>>(),
-                           10);
+    assert_approx_eq_ulps!(
+       hanning_iter(2).collect::<DVec<f64>>(),
+       dvec![
+           0.0,
+           0.0,
+       ],
+       UNITS_IN_LAST_PLACE);
 
-    let expected: Vec<f64> = vec![
-        0.0,
-        1.0,
-        0.0,
-    ];
-    assert_approx_eq_ulps!(DVec::from_slice(expected.len(),
-                                            &expected[..]),
-                           hanning(3).collect::<DVec<f64>>(),
-                           10);
+    assert_approx_eq_ulps!(
+        hanning_iter(3).collect::<DVec<f64>>(),
+        dvec![
+            0.0,
+            1.0,
+            0.0,
+        ],
+        UNITS_IN_LAST_PLACE);
 
     let expected: Vec<f64> = vec![
         0.0,
@@ -46,7 +47,7 @@ fn test_hanning() {
     ];
     assert_approx_eq_ulps!(DVec::from_slice(expected.len(),
                                             &expected[..]),
-                           hanning(10).collect::<DVec<f64>>(),
+                           hanning_iter(10).collect::<DVec<f64>>(),
                            10);
 
     let expected: Vec<f64> = vec![0.0,
@@ -62,7 +63,7 @@ fn test_hanning() {
                                   0.0];
     assert_approx_eq_ulps!(DVec::from_slice(expected.len(),
                                             &expected[..]),
-                           hanning(11).collect::<DVec<f64>>(),
+                           hanning_iter(11).collect::<DVec<f64>>(),
                            10);
 }
 
@@ -72,7 +73,7 @@ fn test_hamming() {
                                   0.08000000000000002];
     assert_approx_eq_ulps!(DVec::from_slice(expected.len(),
                                             &expected[..]),
-                           hamming(2).collect::<DVec<f64>>(),
+                           hamming_iter(2).collect::<DVec<f64>>(),
                            10);
 
     let expected: Vec<f64> = vec![0.08000000000000002,
@@ -80,7 +81,7 @@ fn test_hamming() {
                                   0.08000000000000002];
     assert_approx_eq_ulps!(DVec::from_slice(expected.len(),
                                             &expected[..]),
-                           hamming(3).collect::<DVec<f64>>(),
+                           hamming_iter(3).collect::<DVec<f64>>(),
                            10);
 
     let expected: Vec<f64> = vec![0.08000000000000002,
@@ -95,7 +96,7 @@ fn test_hamming() {
                                   0.08000000000000002];
     assert_approx_eq_ulps!(DVec::from_slice(expected.len(),
                                             &expected[..]),
-                           hamming(10).collect::<DVec<f64>>(),
+                           hamming_iter(10).collect::<DVec<f64>>(),
                            10);
 }
 
@@ -105,7 +106,7 @@ fn test_blackman() {
                                   0.000060000000000004494];
     assert_approx_eq_ulps!(DVec::from_slice(expected.len(),
                                             &expected[..]),
-                           blackman(2).collect::<DVec<f64>>(),
+                           blackman_iter(2).collect::<DVec<f64>>(),
                            10);
 
     let expected: Vec<f64> = vec![0.000060000000000004494,
@@ -113,7 +114,7 @@ fn test_blackman() {
                                   0.000060000000000004494];
     assert_approx_eq_ulps!(DVec::from_slice(expected.len(),
                                             &expected[..]),
-                           blackman(3).collect::<DVec<f64>>(),
+                           blackman_iter(3).collect::<DVec<f64>>(),
                            10);
 
     let expected: Vec<f64> = vec![0.000060000000000004494,
@@ -128,7 +129,7 @@ fn test_blackman() {
                                   0.000060000000000004494];
     assert_approx_eq_ulps!(DVec::from_slice(expected.len(),
                                             &expected[..]),
-                           blackman(10).collect::<DVec<f64>>(),
+                           blackman_iter(10).collect::<DVec<f64>>(),
                            10);
 }
 
@@ -137,13 +138,13 @@ fn test_nuttall() {
     let expected: Vec<f32> = vec![0.0, 0.0];
     assert_approx_eq_ulps!(DVec::from_slice(expected.len(),
                                             &expected[..]),
-                           nuttall(2).collect::<DVec<f32>>(),
+                           nuttall_iter(2).collect::<DVec<f32>>(),
                            10);
 
     let expected: Vec<f32> = vec![0.0, 1.0, 0.0];
     assert_approx_eq_ulps!(DVec::from_slice(expected.len(),
                                             &expected[..]),
-                           nuttall(3).collect::<DVec<f32>>(),
+                           nuttall_iter(3).collect::<DVec<f32>>(),
                            10);
 
     let expected: Vec<f32> = vec![0.0,
@@ -158,6 +159,6 @@ fn test_nuttall() {
                                   0.0];
     assert_approx_eq_ulps!(DVec::from_slice(expected.len(),
                                             &expected[..]),
-                           nuttall(10).collect::<DVec<f32>>(),
+                           nuttall_iter(10).collect::<DVec<f32>>(),
                            10);
 }

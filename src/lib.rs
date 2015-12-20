@@ -114,7 +114,7 @@ pub fn cosine_at<T: Float + CanRepresentPi>(a: T,
         let b_ = b * (T::from(2.).unwrap() * x).cos();
         let c_ = c * (T::from(4.).unwrap() * x).cos();
         let d_ = d * (T::from(6.).unwrap() * x).cos();
-        ((a - b_) + (c_ - d_)).max(T::from(0.).unwrap())
+        (a - b_) + (c_ - d_)
     }
 
 /// returns an iterator that yields the values for a [cosine

@@ -83,6 +83,6 @@ are well written, documented and tested.
 **communicate !**  
 [write an issue](https://github.com/snd/window/issues/new) to start a discussion before writing code that may or may not get merged.
 
-[this project adheres to the contributor covenant 1.2](CODE_OF_CONDUCT.MD). by participating, you are expected to uphold this code. please report unacceptable behavior to kruemaxi@gmail.com.
+[this project adheres to the contributor covenant 1.2](CODE_OF_CONDUCT.md). by participating, you are expected to uphold this code. please report unacceptable behavior to kruemaxi@gmail.com.
 
 ## [license: MIT](LICENSE)

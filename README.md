@@ -1,7 +1,7 @@
 # apodize
 
-[![](https://meritbadge.herokuapp.com/cosine-window)](https://crates.io/crates/cosine-window)
-[![Build Status](https://travis-ci.org/snd/cosine-window.svg?branch=master)](https://travis-ci.org/snd/cosine-window/branches)
+[![](https://meritbadge.herokuapp.com/apodize)](https://crates.io/crates/apodize)
+[![Build Status](https://travis-ci.org/snd/apodize.svg?branch=master)](https://travis-ci.org/snd/apodize/branches)
 
 **rust iterators that yield
 [generalized cosine](https://snd.github.io/apodize/apodize/fn.cosine_iter.html),

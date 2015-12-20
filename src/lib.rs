@@ -16,8 +16,12 @@ extern crate apodize;
 use apodize::{hanning_iter};
 
 fn main() {
-    let size = 7;
-    let window = hanning_iter::<f64>(size).collect::<DVec<f64>>();
+    // create a hanning window iterator of size 7
+    // and collect the values it yields in an nalgebra::DVec.
+    // hanning_iter is generic over the type
+    // of floating point number yielded (f32 or f64).
+    // we use f64 here.
+    let window = hanning_iter::<f64>(7).collect::<DVec<f64>>();
 
     assert_approx_eq_ulps!(
         window,

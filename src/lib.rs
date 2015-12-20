@@ -45,12 +45,30 @@ fn main() {
 }
 ```
 */
+
 extern crate num;
 use num::traits::Float;
 
-pub mod pi;
-use pi::Pi;
+/// the constant pi for generic floating point types.
+/// workaround until [associated
+/// constants](https://doc.rust-lang.org/book/associated-constants.html)
+/// are stable.
+pub trait CanRepresentPi {
+    fn pi() -> Self;
+}
 
+impl CanRepresentPi for f32 {
+    #[inline]
+    fn pi() -> Self { std::f32::consts::PI }
+}
+
+impl CanRepresentPi for f64 {
+    #[inline]
+    fn pi() -> Self { std::f64::consts::PI }
+}
+
+/// holds the window coefficients and
+/// iteration state of a cosine window iterator
 pub struct CosineWindowIter<T> {
     a: T,
     b: T,
@@ -60,7 +78,7 @@ pub struct CosineWindowIter<T> {
     size: usize,
 }
 
-impl<T: Float + Pi> Iterator for CosineWindowIter<T> {
+impl<T: Float + CanRepresentPi> Iterator for CosineWindowIter<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<T> {
@@ -69,21 +87,22 @@ impl<T: Float + Pi> Iterator for CosineWindowIter<T> {
         }
         let index = self.index;
         self.index += 1;
-        Some(cosine_window_value_at_index(self.a,
-                                          self.b,
-                                          self.c,
-                                          self.d,
-                                          self.size,
-                                          index))
+        Some(cosine_at(self.a,
+                       self.b,
+                       self.c,
+                       self.d,
+                       self.size,
+                       index))
     }
 }
 
 /// returns the value of the [cosine
 /// window](https://en.wikipedia.org/wiki/Window_function#Higher-order_generalized_cosine_windows)
-/// with the coefficients `a`, `b`, `c` and `d`, of `size`
+/// of `size`
+/// with the coefficients `a`, `b`, `c` and `d`
 /// at index `index`
 #[inline]
-pub fn cosine_window_value_at_index<T: Float + Pi>(a: T,
+pub fn cosine_at<T: Float + CanRepresentPi>(a: T,
                                                    b: T,
                                                    c: T,
                                                    d: T,
@@ -100,8 +119,8 @@ pub fn cosine_window_value_at_index<T: Float + Pi>(a: T,
 
 /// returns an iterator that yields the values for a [cosine
 /// window](https://en.wikipedia.org/wiki/Window_function#Hann_.28Hanning.29_window) of `size`
-/// with four coefficients `a`, `b`, `c` and `d`
-pub fn cosine<T: Float + Pi>(a: T,
+/// with the coefficients `a`, `b`, `c` and `d`
+pub fn cosine<T: Float + CanRepresentPi>(a: T,
                              b: T,
                              c: T,
                              d: T,
@@ -120,24 +139,24 @@ pub fn cosine<T: Float + Pi>(a: T,
 
 /// returns an iterator that yields the values for a [hanning
 /// window](https://en.wikipedia.org/wiki/Window_function#Hann_.28Hanning.29_window) of `size`
-pub fn hanning<T: Float + Pi>(size: usize) -> CosineWindowIter<T> {
+pub fn hanning<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<T> {
     cosine::<T>(T::from(0.5).unwrap(), T::from(0.5).unwrap(), T::from(0.).unwrap(), T::from(0.).unwrap(), size)
 }
 
 /// returns an iterator that yields the values for a [hamming
 /// window](https://en.wikipedia.org/wiki/Window_function#Hamming_window) of `size`
-pub fn hamming<T: Float + Pi>(size: usize) -> CosineWindowIter<T> {
+pub fn hamming<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<T> {
     cosine::<T>(T::from(0.54).unwrap(), T::from(0.46).unwrap(), T::from(0.).unwrap(), T::from(0.).unwrap(), size)
 }
 
 /// returns an iterator that yields the values for a [blackman
 /// window](https://en.wikipedia.org/wiki/Window_function#Blackman_windows) of `size`
-pub fn blackman<T: Float + Pi>(size: usize) -> CosineWindowIter<T> {
+pub fn blackman<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<T> {
     cosine::<T>(T::from(0.35875).unwrap(), T::from(0.48829).unwrap(), T::from(0.14128).unwrap(), T::from(0.01168).unwrap(), size)
 }
 
 /// returns an iterator that yields the values for a [nuttall
 /// window](https://en.wikipedia.org/wiki/Window_function#Nuttall_window.2C_continuous_first_derivative) of `size`
-pub fn nuttall<T: Float + Pi>(size: usize) -> CosineWindowIter<T> {
+pub fn nuttall<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<T> {
     cosine::<T>(T::from(0.355768).unwrap(), T::from(0.487396).unwrap(), T::from(0.144232).unwrap(), T::from(0.012604).unwrap(), size)
 }

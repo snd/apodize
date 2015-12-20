@@ -8,7 +8,7 @@ homepage = "https://github.com/snd/apodize"
 repository = "https://github.com/snd/apodize.git"
 readme = "README.md"
 keywords = ["iterator", "window", "hanning", "hamming", "blackman"]
-license_file = "LICENSE"
+license = "MIT"
 
 [dependencies]
 num = "0.1.29"

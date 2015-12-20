@@ -16,8 +16,6 @@ extern crate apodize;
 use apodize::{hanning_iter};
 
 fn main() {
-    let data: DVec<f64> = dvec![1., 2., 3., 4., 5., 6., 7.];
-
     let size = 7;
     let window = hanning_iter::<f64>(size).collect::<DVec<f64>>();
 
@@ -32,6 +30,9 @@ fn main() {
             0.25,
             0.0],
         10);
+
+    // some data we want to window
+    let data: DVec<f64> = dvec![1., 2., 3., 4., 5., 6., 7.];
 
     // apply window to data
     let windowed_data = window.mul(data);

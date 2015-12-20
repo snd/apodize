@@ -3,10 +3,23 @@
 [![](https://meritbadge.herokuapp.com/cosine-window)](https://crates.io/crates/cosine-window)
 [![Build Status](https://travis-ci.org/snd/cosine-window.svg?branch=master)](https://travis-ci.org/snd/cosine-window/branches)
 
-**iterators that yield generalized cosine, hanning, hamming, blackman and nuttall windows**
+**rust iterators that yield
+[generalized cosine](https://snd.github.io/apodize/apodize/fn.cosine_iter.html),
+[hanning](https://snd.github.io/apodize/apodize/fn.hanning_iter.html),
+[hamming](https://snd.github.io/apodize/apodize/fn.hamming_iter.html),
+[blackman](https://snd.github.io/apodize/apodize/fn.blackman_iter.html),
+and
+[nuttall](https://snd.github.io/apodize/apodize/fn.nuttall_iter.html)
+windows**
 
-[documentation](https://snd.github.io/apodize/apodize/index.html)
+### [link to generated documentation (rustdoc)](https://snd.github.io/apodize/apodize/index.html)
 
+you will most likely want to collect
+and then multiply that vector with some data
+
+generic over type of floating point number yielded (f32 or f64).
+
+example for a hanning window (hamming, blackman and nuttall are analogous):
 ```rust
 use std::ops::Mul;
 
@@ -14,40 +27,41 @@ use std::ops::Mul;
 extern crate nalgebra;
 use nalgebra::{ApproxEq, DVec};
 
+#[macro_use]
 extern crate apodize;
-use apodize::{hanning};
+use apodize::{hanning_iter};
 
 fn main() {
-    let data: DVec<f64> = vec![1., 2., 3., 4., 5., 6., 7.].iter().map(|x| *x).collect();
+    let data: DVec<f64> = dvec![1., 2., 3., 4., 5., 6., 7.];
 
     let size = 7;
-    let window = hanning::<f64>(size).collect::<DVec<f64>>();
+    let window = hanning_iter::<f64>(size).collect::<DVec<f64>>();
 
     assert_approx_eq_ulps!(
-        vec![
+        window,
+        dvec![
             0.0,
             0.24999999999999994,
             0.7499999999999999,
             1.0,
             0.7500000000000002,
             0.25,
-            0.0].iter().map(|x| *x).collect(),
-        window,
+            0.0],
         10);
 
     // apply window to data
     let windowed_data = window.mul(data);
 
     assert_approx_eq_ulps!(
-        vec![
+        windowed_data,
+        dvec![
             0.0,
             0.4999999999999999,
             2.2499999999999996,
             4.0,
             3.750000000000001,
             1.5,
-            0.0].iter().map(|x| *x).collect(),
-        windowed_data,
+            0.0],
         10);
 }
 ```

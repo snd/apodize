@@ -6,7 +6,7 @@ use apodize::{blackman_iter, hamming_iter, hanning_iter, nuttall_iter};
 extern crate nalgebra;
 use nalgebra::{ApproxEq, DVec};
 
-const UNITS_IN_LAST_PLACE: u32 = 30;
+const UNITS_IN_LAST_PLACE: u32 = 50;
 
 #[test]
 #[should_panic]

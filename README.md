@@ -12,6 +12,10 @@ and
 [nuttall](https://snd.github.io/apodize/apodize/fn.nuttall_iter.html)
 windows**
 
+useful for
+smoothing the sharp discontinuities at the edges (beginning and end)
+of a window of samples before applying a fast fourier transform.
+
 ### [generated documentation](https://snd.github.io/apodize/apodize/index.html)
 
 <!--

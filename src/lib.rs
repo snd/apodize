@@ -95,11 +95,17 @@ impl CanRepresentPi for f64 {
 /// holds the window coefficients and
 /// iteration state of a cosine window iterator
 pub struct CosineWindowIter<T> {
+    /// coefficient `a` of the cosine window
     pub a: T,
+    /// coefficient `b` of the cosine window
     pub b: T,
+    /// coefficient `c` of the cosine window
     pub c: T,
+    /// coefficient `d` of the cosine window
     pub d: T,
+    /// the current index of the iterator
     pub index: usize,
+    /// `size` of the cosine window
     pub size: usize,
 }
 

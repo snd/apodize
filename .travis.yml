@@ -23,7 +23,7 @@ env:
 after_success: |
   if [ "${UPDATE_GH_PAGES_DOCUMENTATION}" = "true" ]; then
     cargo doc --no-deps && \
-    sudo pip install ghp-import && \
+    pip install ghp-import && \
     ghp-import -n target/doc && \
     git push -qf https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
   fi

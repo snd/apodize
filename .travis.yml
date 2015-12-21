@@ -10,8 +10,20 @@ matrix:
 env:
   global:
     - secure: "BZEGoEQuRqwDrxoUANH8TgbrNOld5Tga0y8eo3HVIZp8SNX8R8Ro4NhnFkYcQrB55vRqFI9KuLs1/vT1E08gUEXDxQ/LSOQB4+aE5PIQ9Q59ZXafXj5ZyEvMXF/pPzDNh5XxvSs0cFVLp29jB3ezNrkRA5+Bwl53grE227rYUuFoRfHpn2qbIkf1S9174wo+jwiXcrD4HEltCxNzxp8MxI1sHN19dz9VZKQEiiGWf1+1B6ymG77eJaRBnErovHZ/+GeLDFwTWBR3kyYW5S9VVADajMYXoTWsad03xdFj/1FXsv2lY8db+8zDYlFIYvYIXH14K81+yv2PBGdpo74lRkV4DV30StxvOZa7BvBTNfble6wPjusVbYL5pVlZRRgD6JDYiUePYfJ+5JATbf0jd1z3uvedDiZTCoLsDtEg/Y4k0dz65bjPQu5tx2Qgij3anDL6x5mr9KWt9NBaImKEdZBONMlffEnIV+bHyevf+4jETz4Ha67i9siQWkdYGeielkPOmbIWarGgkpPFMvs7wKcNYlrLRqtVKLY5OzrW586G4bdzZZ8JSA4gpeBvwmdOWAZd5V1y5HP8r/b1LaOGDdVOV5Vt0ULLbbQECldewOoG/6RRg1drOLh1HVROJsFJzmticX45iEQW1EDW+GU5/krv6Ng/DofI+reEozA4xXo="
+  matrix:
+    - UPDATE_GH_PAGES_DOCUMENTATION=true
+    - UPDATE_GH_PAGES_DOCUMENTATION=false
+  exclude:
+    - rust: stable
+      env: UPDATE_GH_PAGES_DOCUMENTATION=false
+    - rust: beta
+      env: UPDATE_GH_PAGES_DOCUMENTATION=true
+    - rust: nightly
+      env: UPDATE_GH_PAGES_DOCUMENTATION=true
 after_success: |
-  cargo doc && \
-  sudo pip install ghp-import && \
-  ghp-import -n target/doc && \
-  git push -qf https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
+  if [ "${UPDATE_GH_PAGES_DOCUMENTATION}" = "true" ]; then
+    cargo doc --no-deps && \
+    sudo pip install ghp-import && \
+    ghp-import -n target/doc && \
+    git push -qf https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
+  fi

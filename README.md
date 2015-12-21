@@ -14,14 +14,16 @@ windows**
 
 useful for
 smoothing the sharp discontinuities at the edges (beginning and end)
-of a window of samples before applying a fast fourier transform.
+of each segment when doing a
+[short time fourier transform](https://en.wikipedia.org/wiki/Short-time_Fourier_transform)
 
 ### [generated documentation](https://snd.github.io/apodize/apodize/index.html)
 
-<!--
--->
+you will most likely collect the values yielded by the window iterator
+in a vector and then multiply that vector repeatedly with some
+data to apodize the data.
 
-example for a hanning window (hamming, blackman and nuttall are analogous):
+here is an example of that for a hanning window (hamming, blackman and nuttall are analogous):
 ```rust
 use std::ops::Mul;
 
@@ -75,4 +77,4 @@ fn main() {
 
 ### [contributing](contributing.md)
 
-## [license: MIT](LICENSE)
+### [license: MIT](LICENSE)

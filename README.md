@@ -22,9 +22,9 @@ to the `[dependencies]` section of your `Cargo.toml` and `extern crate apodize;`
 
 ### [generated documentation](https://snd.github.io/apodize/apodize/index.html)
 
-you will most likely collect the values yielded by the window iterator
-in a vector and then multiply that vector repeatedly with some
-data to apodize the data.
+you will most likely want to collect the yielded values
+in a vector and then multiply that window vector repeatedly with some
+data vectors to apodize them.
 
 here is an example of that for a hanning window (hamming, blackman and nuttall are analogous):
 ```rust

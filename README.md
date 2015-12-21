@@ -17,6 +17,9 @@ smoothing the sharp discontinuities at the edges (beginning and end)
 of each segment when doing a
 [short time fourier transform](https://en.wikipedia.org/wiki/Short-time_Fourier_transform)
 
+to use add the version string found clicking here [![](https://meritbadge.herokuapp.com/apodize)](https://crates.io/crates/apodize)
+to the `[dependencies]` section of your `Cargo.toml` and `extern crate apodize;` in your code.
+
 ### [generated documentation](https://snd.github.io/apodize/apodize/index.html)
 
 you will most likely collect the values yielded by the window iterator

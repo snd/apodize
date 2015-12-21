@@ -127,12 +127,13 @@ impl<T: Float + CanRepresentPi> Iterator for CosineWindowIter<T> {
 /// with the coefficients `a`, `b`, `c` and `d`
 /// at index `index`
 #[inline]
-pub fn cosine_at<T: Float + CanRepresentPi>(a: T,
-                                                   b: T,
-                                                   c: T,
-                                                   d: T,
-                                                   size: usize,
-                                                   index: usize)
+pub fn cosine_at<T: Float + CanRepresentPi>(
+    a: T,
+    b: T,
+    c: T,
+    d: T,
+    size: usize,
+    index: usize)
     -> T {
         let pi: T = T::pi();
         let x: T = (pi * from!(T, index)) / from!(T, size - 1);
@@ -145,11 +146,12 @@ pub fn cosine_at<T: Float + CanRepresentPi>(a: T,
 /// returns an iterator that yields the values for a [cosine
 /// window](https://en.wikipedia.org/wiki/Window_function#Hann_.28Hanning.29_window) of `size`
 /// with the coefficients `a`, `b`, `c` and `d`
-pub fn cosine_iter<T: Float + CanRepresentPi>(a: T,
-                             b: T,
-                             c: T,
-                             d: T,
-                             size: usize)
+pub fn cosine_iter<T: Float + CanRepresentPi>(
+    a: T,
+    b: T,
+    c: T,
+    d: T,
+    size: usize)
     -> CosineWindowIter<T> {
         assert!(size > 1);
         CosineWindowIter {

@@ -13,6 +13,7 @@ env:
   matrix:
     - UPDATE_GH_PAGES_DOCUMENTATION=true
     - UPDATE_GH_PAGES_DOCUMENTATION=false
+matrix:
   exclude:
     - rust: stable
       env: UPDATE_GH_PAGES_DOCUMENTATION=false

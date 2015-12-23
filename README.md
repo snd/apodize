@@ -16,8 +16,9 @@ useful for
 smoothing the sharp discontinuities at the edges (beginning and end)
 of each segment when doing a
 [short time fourier transform](https://en.wikipedia.org/wiki/Short-time_Fourier_transform).
-windowing also makes that the signal near the time
-being analyzed will have higher weight than the signal
+windowing also improves temporal resolution by making
+the signal near the time
+being analyzed have higher weight than the signal
 further away from the time being analyzed.
 
 to use add `apodize = "0.1.1"`

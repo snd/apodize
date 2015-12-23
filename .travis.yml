@@ -12,16 +12,10 @@ env:
   matrix:
     - UPDATE_GH_PAGES_DOCUMENTATION=true
     - UPDATE_GH_PAGES_DOCUMENTATION=false
-matrix:
-  exclude:
-    - rust: stable
-      env: UPDATE_GH_PAGES_DOCUMENTATION=false
-    - rust: beta
-      env: UPDATE_GH_PAGES_DOCUMENTATION=true
-    - rust: nightly
-      env: UPDATE_GH_PAGES_DOCUMENTATION=true
+# after success build rust documentation and push it to gh-pages branch
+# only do this for the stable branch (once per build)
 after_success: |
-  if [ "${UPDATE_GH_PAGES_DOCUMENTATION}" = "true" ]; then
+  if [ "$TRAVIS_RUST_VERSION" = "stable" ] ; then
     cargo doc --no-deps && \
     sudo pip install ghp-import && \
     ghp-import -n target/doc && \

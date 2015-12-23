@@ -15,7 +15,7 @@ windows**
 useful for
 smoothing the sharp discontinuities at the edges (beginning and end)
 of each segment when doing a
-[short time fourier transform](https://en.wikipedia.org/wiki/Short-time_Fourier_transform)
+[short time fourier transform](https://en.wikipedia.org/wiki/Short-time_Fourier_transform).
 windowing also makes that the signal near the time
 being analyzed will have higher weight than the signal
 further away from the time being analyzed.

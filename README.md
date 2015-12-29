@@ -14,7 +14,7 @@ windows**
 
 useful for
 smoothing the sharp discontinuities at the edges (beginning and end)
-of each segment when doing a
+of each slice of samples when doing a
 [short time fourier transform](https://en.wikipedia.org/wiki/Short-time_Fourier_transform).
 windowing also improves temporal resolution by making
 the signal near the time
@@ -24,7 +24,7 @@ further away from the time being analyzed.
 to use add `apodize = "0.1.1"`
 to the `[dependencies]` section of your `Cargo.toml` and `extern crate apodize;` in your code.
 
-### [read on in the generated documentation](https://snd.github.io/apodize/apodize/index.html)
+## [read on in the documentation](https://snd.github.io/apodize/apodize/index.html)
 
 ### [contributing](contributing.md)
 

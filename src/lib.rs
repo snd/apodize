@@ -140,7 +140,9 @@ impl<T: Float + CanRepresentPi> Iterator for CosineWindowIter<T> {
 /// window](https://en.wikipedia.org/wiki/Window_function#Higher-order_generalized_cosine_windows)
 /// of `size`
 /// with the coefficients `a`, `b`, `c` and `d`
-/// at index `index`
+/// at `index`
+/// # Panics
+/// panics unless `1 < size`
 #[inline]
 pub fn cosine_at<T: Float + CanRepresentPi>(
     a: T,
@@ -161,6 +163,8 @@ pub fn cosine_at<T: Float + CanRepresentPi>(
 /// returns an iterator that yields the values for a [cosine
 /// window](https://en.wikipedia.org/wiki/Window_function#Hann_.28Hanning.29_window) of `size`
 /// with the coefficients `a`, `b`, `c` and `d`
+/// # Panics
+/// panics unless `1 < size`
 pub fn cosine_iter<T: Float + CanRepresentPi>(
     a: T,
     b: T,
@@ -168,7 +172,7 @@ pub fn cosine_iter<T: Float + CanRepresentPi>(
     d: T,
     size: usize)
     -> CosineWindowIter<T> {
-        assert!(size > 1);
+        assert!(1 < size);
         CosineWindowIter {
             a: a,
             b: b,
@@ -181,6 +185,8 @@ pub fn cosine_iter<T: Float + CanRepresentPi>(
 
 /// returns an iterator that yields the values for a [hanning
 /// window](https://en.wikipedia.org/wiki/Window_function#Hann_.28Hanning.29_window) of `size`
+/// # Panics
+/// panics unless `1 < size`
 pub fn hanning_iter<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<T> {
     cosine_iter::<T>(
         from!(T, 0.5),
@@ -192,6 +198,8 @@ pub fn hanning_iter<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<
 
 /// returns an iterator that yields the values for a [hamming
 /// window](https://en.wikipedia.org/wiki/Window_function#Hamming_window) of `size`
+/// # Panics
+/// panics unless `1 < size`
 pub fn hamming_iter<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<T> {
     cosine_iter::<T>(
         from!(T, 0.54),
@@ -203,6 +211,8 @@ pub fn hamming_iter<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<
 
 /// returns an iterator that yields the values for a [blackman
 /// window](https://en.wikipedia.org/wiki/Window_function#Blackman_windows) of `size`
+/// # Panics
+/// panics unless `1 < size`
 pub fn blackman_iter<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<T> {
     cosine_iter::<T>(
         from!(T, 0.35875),
@@ -214,6 +224,8 @@ pub fn blackman_iter<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter
 
 /// returns an iterator that yields the values for a [nuttall
 /// window](https://en.wikipedia.org/wiki/Window_function#Nuttall_window.2C_continuous_first_derivative) of `size`
+/// # Panics
+/// panics unless `1 < size`
 pub fn nuttall_iter<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<T> {
     cosine_iter::<T>(
         from!(T, 0.355768),

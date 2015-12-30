@@ -19,7 +19,7 @@ being analyzed have higher weight than the signal
 further away from the time being analyzed.
 
 to use add `apodize = "0.1.1"`
-to the `[dependencies]` section of your `Cargo.toml` and `extern crate apodize;` in your code.
+to the `[dependencies]` section of your `Cargo.toml` and call `extern crate apodize;` in your code.
 
 you will most likely want to collect the yielded values
 in a vector and then multiply that window vector repeatedly with some

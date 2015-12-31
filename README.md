@@ -24,7 +24,7 @@ further away from the time being analyzed.
 to use add `apodize = "0.1.1"`
 to the `[dependencies]` section of your `Cargo.toml` and call `extern crate apodize;` in your code.
 
-## [read on in the documentation](https://snd.github.io/apodize/apodize/index.html)
+## [read the documentation for an example and more !](https://snd.github.io/apodize/apodize/index.html)
 
 ### [contributing](contributing.md)
 

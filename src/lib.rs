@@ -133,12 +133,14 @@ pub struct CosineWindowIter<T> {
 }
 
 impl<T: Float + CanRepresentPi> ExactSizeIterator for CosineWindowIter<T> {
+    #[inline]
     fn len(&self) -> usize { self.size }
 }
 
 impl<T: Float + CanRepresentPi> Iterator for CosineWindowIter<T> {
     type Item = T;
 
+    #[inline]
     fn next(&mut self) -> Option<T> {
         if self.index == self.size {
             return None;
@@ -153,6 +155,7 @@ impl<T: Float + CanRepresentPi> Iterator for CosineWindowIter<T> {
                        index))
     }
 
+    #[inline]
     fn size_hint(&self) -> (usize, Option<usize>) {
         let remaining = self.size - self.index;
         (remaining, Some(remaining))

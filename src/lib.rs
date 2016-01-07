@@ -58,10 +58,10 @@ fn main() {
             0.0],
         10);
 
-    // some data we want to window
+    // some data we want to apodize (multiply with the window)
     let data: DVec<f64> = dvec![1., 2., 3., 4., 5., 6., 7.];
 
-    // apply window to data
+    // multiply data with window
     let windowed_data = window.mul(data);
 
     assert_approx_eq_ulps!(

@@ -21,11 +21,13 @@ further away from the time being analyzed.
 to use add `apodize = "*"`
 to the `[dependencies]` section of your `Cargo.toml` and call `extern crate apodize;` in your code.
 
+## example
+
 you will most likely want to collect the yielded values
 in a vector and then multiply that window vector repeatedly with some
 data vectors to apodize them.
 
-here is an example of that for a hanning window (hamming, blackman and nuttall are analogous):
+here is an example of that for a hanning window (hamming, blackman and nuttall are analogous).
 
 ```
 use std::ops::Mul;

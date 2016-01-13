@@ -1,5 +1,7 @@
 # apodize
 
+*status: working. tested. api still in flux.*
+
 [![Build Status](https://travis-ci.org/snd/apodize.svg?branch=master)](https://travis-ci.org/snd/apodize/branches)
 [![](https://meritbadge.herokuapp.com/apodize)](https://crates.io/crates/apodize)
 

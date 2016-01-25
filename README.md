@@ -5,7 +5,8 @@
 [![Build Status](https://travis-ci.org/snd/apodize.svg?branch=master)](https://travis-ci.org/snd/apodize/branches)
 [![](https://meritbadge.herokuapp.com/apodize)](https://crates.io/crates/apodize)
 
-**rust iterators that yield
+**[rust](https://www.rust-lang.org/)
+iterators that yield
 [generalized cosine](https://snd.github.io/apodize/apodize/fn.cosine_iter.html),
 [hanning](https://snd.github.io/apodize/apodize/fn.hanning_iter.html),
 [hamming](https://snd.github.io/apodize/apodize/fn.hamming_iter.html),

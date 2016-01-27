@@ -81,8 +81,11 @@ fn main() {
 ```
 */
 
+use std::ops::{Sub, Div};
+use std::marker::PhantomData;
+
 extern crate num;
-use num::traits::Float;
+use num::traits::{Float, Signed};
 
 /// helper shorthand macro for shorter, more readable code:
 /// `from!(T, x)` -> `T::from(x).unwrap()`
@@ -262,4 +265,83 @@ pub fn nuttall_iter<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<
         from!(T, 0.144232),
         from!(T, 0.012604),
         size)
+}
+
+/// holds the iteration state
+pub struct TriangularWindowIter<T> {
+    pub l: usize,
+    /// the current `index` of the iterator
+    pub index: usize,
+    /// `size` of the triangular window
+    pub size: usize,
+    /// we have no field in this iterator holding a value of
+    /// the type this iterator should yield.
+    /// thus we must create a phantom field holding this information.
+    phantom: PhantomData<T>,
+}
+
+/// returns the value of the
+/// [triangular window]
+/// (https://en.wikipedia.org/wiki/Window_function#Triangular_window)
+/// of `size`
+/// at `index`
+/// # Panics
+/// panics unless `1 < size`
+#[inline]
+pub fn triangular_at<T>(
+    l: usize,
+    size: usize,
+    index: usize
+) -> T
+    where T: From<usize> + Signed + Sub<T, Output=T> + Div<T, Output=T>
+{
+    let dividend = T::from(index) -
+        (T::from(size) - T::from(1 as usize)) / T::from(2 as usize);
+    let divisor = T::from(l) / T::from(2 as usize);
+    T::from(1 as usize) - (dividend / divisor).abs()
+}
+
+impl<T> Iterator for TriangularWindowIter<T>
+    where T: From<usize> + Signed + Sub<T, Output=T> + Div<T, Output=T>
+{
+    type Item = T;
+
+    #[inline]
+    fn next(&mut self) -> Option<T> {
+        if self.index == self.size {
+            return None;
+        }
+        let index = self.index;
+        self.index += 1;
+        Some(triangular_at::<T>(self.l, self.size, index))
+    }
+
+    #[inline]
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        let remaining = self.size - self.index;
+        (remaining, Some(remaining))
+    }
+}
+
+impl<T> ExactSizeIterator for TriangularWindowIter<T>
+    where T: From<usize> + Signed + Sub<T, Output=T> + Div<T, Output=T>
+{
+    #[inline]
+    fn len(&self) -> usize { self.size }
+}
+
+/// returns an iterator that yields the values for a [triangular
+/// window](https://en.wikipedia.org/wiki/Window_function#Triangular_window)
+/// # Panics
+/// panics unless `1 < size`
+pub fn triangular_iter<T>(size: usize, l: usize) -> TriangularWindowIter<T>
+    where T: From<usize> + Signed + Sub<T, Output=T> + Div<T, Output=T>
+{
+    assert!(1 < size);
+    TriangularWindowIter::<T> {
+        l: l,
+        size: size,
+        index: 0,
+        phantom: PhantomData,
+    }
 }

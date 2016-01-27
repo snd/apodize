@@ -134,11 +134,6 @@ pub struct CosineWindowIter<T> {
     pub size: usize,
 }
 
-impl<T: Float + CanRepresentPi> ExactSizeIterator for CosineWindowIter<T> {
-    #[inline]
-    fn len(&self) -> usize { self.size }
-}
-
 impl<T: Float + CanRepresentPi> Iterator for CosineWindowIter<T> {
     type Item = T;
 
@@ -164,6 +159,11 @@ impl<T: Float + CanRepresentPi> Iterator for CosineWindowIter<T> {
     }
 }
 
+impl<T: Float + CanRepresentPi> ExactSizeIterator for CosineWindowIter<T> {
+    #[inline]
+    fn len(&self) -> usize { self.size }
+}
+
 /// returns the value of the [cosine
 /// window](https://en.wikipedia.org/wiki/Window_function#Higher-order_generalized_cosine_windows)
 /// of `size`
@@ -178,15 +178,16 @@ pub fn cosine_at<T: Float + CanRepresentPi>(
     c: T,
     d: T,
     size: usize,
-    index: usize)
-    -> T {
-        let pi: T = T::pi();
-        let x: T = (pi * from!(T, index)) / from!(T, size - 1);
-        let b_ = b * (from!(T, 2.) * x).cos();
-        let c_ = c * (from!(T, 4.) * x).cos();
-        let d_ = d * (from!(T, 6.) * x).cos();
-        (a - b_) + (c_ - d_)
-    }
+    index: usize
+) -> T
+{
+    let pi: T = T::pi();
+    let x: T = (pi * from!(T, index)) / from!(T, size - 1);
+    let b_ = b * (from!(T, 2.) * x).cos();
+    let c_ = c * (from!(T, 4.) * x).cos();
+    let d_ = d * (from!(T, 6.) * x).cos();
+    (a - b_) + (c_ - d_)
+}
 
 /// returns an iterator that yields the values for a [cosine
 /// window](https://en.wikipedia.org/wiki/Window_function#Hann_.28Hanning.29_window) of `size`

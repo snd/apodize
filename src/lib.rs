@@ -128,7 +128,7 @@ pub struct CosineWindowIter<T> {
     pub c: T,
     /// coefficient `d` of the cosine window
     pub d: T,
-    /// the current index of the iterator
+    /// the current `index` of the iterator
     pub index: usize,
     /// `size` of the cosine window
     pub size: usize,

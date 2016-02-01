@@ -1,6 +1,5 @@
 #[macro_use]
 extern crate apodize;
-use apodize::{blackman_iter, hamming_iter, hanning_iter, nuttall_iter};
 
 #[macro_use]
 extern crate nalgebra;
@@ -11,13 +10,13 @@ const UNITS_IN_LAST_PLACE: u32 = 50;
 #[test]
 #[should_panic]
 fn test_panic_too_short() {
-    let _ = hanning_iter::<f64>(1);
+    let _ = apodize::hanning_iter::<f64>(1);
 }
 
 #[test]
 fn test_hanning() {
     assert_approx_eq_ulps!(
-       hanning_iter(2).collect::<DVec<f64>>(),
+       apodize::hanning_iter(2).collect::<DVec<f64>>(),
        dvec![
            0.0,
            0.0,
@@ -25,7 +24,7 @@ fn test_hanning() {
        UNITS_IN_LAST_PLACE);
 
     assert_approx_eq_ulps!(
-        hanning_iter(3).collect::<DVec<f64>>(),
+        apodize::hanning_iter(3).collect::<DVec<f64>>(),
         dvec![
             0.0,
             1.0,
@@ -34,7 +33,7 @@ fn test_hanning() {
         UNITS_IN_LAST_PLACE);
 
     assert_approx_eq_ulps!(
-        hanning_iter(10).collect::<DVec<f64>>(),
+        apodize::hanning_iter(10).collect::<DVec<f64>>(),
         dvec![
             0.0,
             0.11697777844051094,
@@ -50,7 +49,7 @@ fn test_hanning() {
         UNITS_IN_LAST_PLACE);
 
     assert_approx_eq_ulps!(
-        hanning_iter(11).collect::<DVec<f64>>(),
+        apodize::hanning_iter(11).collect::<DVec<f64>>(),
         dvec![
             0.0,
             0.09549150281252627,
@@ -70,7 +69,7 @@ fn test_hanning() {
 #[test]
 fn test_hamming() {
     assert_approx_eq_ulps!(
-        hamming_iter(2).collect::<DVec<f64>>(),
+        apodize::hamming_iter(2).collect::<DVec<f64>>(),
         dvec![
             0.08000000000000002,
             0.08000000000000002
@@ -78,7 +77,7 @@ fn test_hamming() {
         UNITS_IN_LAST_PLACE);
 
     assert_approx_eq_ulps!(
-        hamming_iter(3).collect::<DVec<f64>>(),
+        apodize::hamming_iter(3).collect::<DVec<f64>>(),
         dvec![
             0.08000000000000002,
             1.0,
@@ -87,7 +86,7 @@ fn test_hamming() {
         UNITS_IN_LAST_PLACE);
 
     assert_approx_eq_ulps!(
-        hamming_iter(10).collect::<DVec<f64>>(),
+        apodize::hamming_iter(10).collect::<DVec<f64>>(),
         dvec![
             0.08000000000000002,
             0.1876195561652701,
@@ -106,7 +105,7 @@ fn test_hamming() {
 #[test]
 fn test_blackman() {
     assert_approx_eq_ulps!(
-        blackman_iter(2).collect::<DVec<f64>>(),
+        apodize::blackman_iter(2).collect::<DVec<f64>>(),
         dvec![
             0.000060000000000004494,
             0.000060000000000004494
@@ -114,7 +113,7 @@ fn test_blackman() {
         UNITS_IN_LAST_PLACE);
 
     assert_approx_eq_ulps!(
-        blackman_iter(3).collect::<DVec<f64>>(),
+        apodize::blackman_iter(3).collect::<DVec<f64>>(),
         dvec![
             0.000060000000000004494,
             1.0,
@@ -123,7 +122,7 @@ fn test_blackman() {
         UNITS_IN_LAST_PLACE);
 
     assert_approx_eq_ulps!(
-        blackman_iter(10).collect::<DVec<f64>>(),
+        apodize::blackman_iter(10).collect::<DVec<f64>>(),
         dvec![
             0.000060000000000004494,
             0.015071173410218106,
@@ -142,17 +141,17 @@ fn test_blackman() {
 #[test]
 fn test_nuttall() {
     assert_approx_eq_ulps!(
-        nuttall_iter(2).collect::<DVec<f32>>(),
+        apodize::nuttall_iter(2).collect::<DVec<f32>>(),
         dvec![0.0, 0.0],
         UNITS_IN_LAST_PLACE);
 
     assert_approx_eq_ulps!(
-        nuttall_iter(3).collect::<DVec<f32>>(),
+        apodize::nuttall_iter(3).collect::<DVec<f32>>(),
         dvec![0.0, 1.0, 0.0],
         UNITS_IN_LAST_PLACE);
 
     assert_approx_eq_ulps!(
-        nuttall_iter(10).collect::<DVec<f32>>(),
+        apodize::nuttall_iter(10).collect::<DVec<f32>>(),
         dvec![
             0.0,
             0.013748631,

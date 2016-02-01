@@ -166,3 +166,53 @@ fn test_nuttall() {
         ],
         UNITS_IN_LAST_PLACE);
 }
+
+#[test]
+fn test_triangular() {
+    assert_approx_eq_ulps!(
+        apodize::triangular_iter(1).collect::<DVec<f64>>(),
+        dvec![1.0],
+        UNITS_IN_LAST_PLACE);
+
+    assert_approx_eq_ulps!(
+        apodize::triangular_iter(2).collect::<DVec<f64>>(),
+        dvec![0.5, 0.5],
+        UNITS_IN_LAST_PLACE);
+
+    assert_approx_eq_ulps!(
+        apodize::triangular_iter(3).collect::<DVec<f64>>(),
+        dvec![0.3333333333333333, 1.0, 0.3333333333333333],
+        UNITS_IN_LAST_PLACE);
+
+    assert_approx_eq_ulps!(
+        apodize::triangular_iter(10).collect::<DVec<f64>>(),
+        dvec![
+            0.09999999999999998,
+            0.30000000000000004,
+            0.5,
+            0.7,
+            0.9,
+            0.9,
+            0.7,
+            0.5,
+            0.30000000000000004,
+            0.09999999999999998
+        ],
+        UNITS_IN_LAST_PLACE);
+    assert_approx_eq_ulps!(
+        apodize::triangular_iter(11).collect::<DVec<f64>>(),
+        dvec![
+            0.09090909090909094,
+            0.2727272727272727,
+            0.4545454545454546,
+            0.6363636363636364,
+            0.8181818181818181,
+            1.,
+            0.8181818181818181,
+            0.6363636363636364,
+            0.4545454545454546,
+            0.2727272727272727,
+            0.09090909090909094
+        ],
+        UNITS_IN_LAST_PLACE);
+}

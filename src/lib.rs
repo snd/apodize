@@ -5,8 +5,9 @@
 [hanning](https://snd.github.io/apodize/apodize/fn.hanning_iter.html),
 [hamming](https://snd.github.io/apodize/apodize/fn.hamming_iter.html),
 [blackman](https://snd.github.io/apodize/apodize/fn.blackman_iter.html),
-and
 [nuttall](https://snd.github.io/apodize/apodize/fn.nuttall_iter.html)
+and
+[triangular](https://snd.github.io/apodize/apodize/fn.triangular_iter.html)
 windows**
 
 useful for
@@ -121,7 +122,7 @@ impl CanRepresentPi for f64 {
 }
 
 /// holds the window coefficients and
-/// iteration state of a cosine window iterator
+/// iteration state of an iterator for a cosine window
 pub struct CosineWindowIter<T> {
     /// coefficient `a` of the cosine window
     pub a: T,

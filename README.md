@@ -11,8 +11,9 @@ iterators that yield
 [hanning](https://snd.github.io/apodize/apodize/fn.hanning_iter.html),
 [hamming](https://snd.github.io/apodize/apodize/fn.hamming_iter.html),
 [blackman](https://snd.github.io/apodize/apodize/fn.blackman_iter.html),
-and
 [nuttall](https://snd.github.io/apodize/apodize/fn.nuttall_iter.html)
+and
+[triangular](https://snd.github.io/apodize/apodize/fn.triangular_iter.html)
 windows**
 
 useful for

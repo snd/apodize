@@ -82,11 +82,8 @@ fn main() {
 ```
 */
 
-use std::ops::{Sub, Div};
-use std::marker::PhantomData;
-
 extern crate num;
-use num::traits::{Float, Signed};
+use num::traits::{Float, Signed, FromPrimitive};
 
 /// helper shorthand macro for shorter, more readable code:
 /// `from!(T, x)` -> `T::from(x).unwrap()`
@@ -268,17 +265,19 @@ pub fn nuttall_iter<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<
         size)
 }
 
-/// holds the iteration state
-pub struct TriangularWindowIter<T> {
+/// holds the iteration state of an iterator for a triangular window
+pub struct TriangularWindowIter {
     pub l: usize,
     /// the current `index` of the iterator
     pub index: usize,
     /// `size` of the triangular window
     pub size: usize,
-    /// we have no field in this iterator holding a value of
-    /// the type this iterator should yield.
-    /// thus we must create a phantom field holding this information.
-    phantom: PhantomData<T>,
+}
+
+macro_rules! f64_from_usize {
+    ($val:expr) => {
+        <f64>::from_usize($val).expect("can't cast this usize to f64 on this architecture");
+    }
 }
 
 /// returns the value of the
@@ -286,35 +285,30 @@ pub struct TriangularWindowIter<T> {
 /// (https://en.wikipedia.org/wiki/Window_function#Triangular_window)
 /// of `size`
 /// at `index`
-/// # Panics
-/// panics unless `1 < size`
 #[inline]
-pub fn triangular_at<T>(
-    l: usize,
-    size: usize,
-    index: usize
-) -> T
-    where T: From<usize> + Signed + Sub<T, Output=T> + Div<T, Output=T>
-{
-    let dividend = T::from(index) -
-        (T::from(size) - T::from(1 as usize)) / T::from(2 as usize);
-    let divisor = T::from(l) / T::from(2 as usize);
-    T::from(1 as usize) - (dividend / divisor).abs()
+pub fn triangular_at(l: usize, size: usize, index: usize) -> f64 {
+    // ends with zeros if l == size - 1
+    // if l == size - 1 && index == 0 then 1 - 1 / 1 == 0
+    // if l == size - 1 && index == size - 1 then 1 - 0 / 1 == 0
+    1. - (
+        (f64_from_usize!(index) - (f64_from_usize!(size) - 1.) / 2.)
+        /
+        (f64_from_usize!(l) / 2.)
+    ).abs()
 }
 
-impl<T> Iterator for TriangularWindowIter<T>
-    where T: From<usize> + Signed + Sub<T, Output=T> + Div<T, Output=T>
+impl Iterator for TriangularWindowIter
 {
-    type Item = T;
+    type Item = f64;
 
     #[inline]
-    fn next(&mut self) -> Option<T> {
+    fn next(&mut self) -> Option<f64> {
         if self.index == self.size {
             return None;
         }
         let index = self.index;
         self.index += 1;
-        Some(triangular_at::<T>(self.l, self.size, index))
+        Some(triangular_at(self.l, self.size, index))
     }
 
     #[inline]
@@ -324,25 +318,23 @@ impl<T> Iterator for TriangularWindowIter<T>
     }
 }
 
-impl<T> ExactSizeIterator for TriangularWindowIter<T>
-    where T: From<usize> + Signed + Sub<T, Output=T> + Div<T, Output=T>
-{
+impl ExactSizeIterator for TriangularWindowIter {
     #[inline]
     fn len(&self) -> usize { self.size }
 }
 
 /// returns an iterator that yields the values for a [triangular
 /// window](https://en.wikipedia.org/wiki/Window_function#Triangular_window)
+/// if `l = size - 1` then the outermost values of the window are `0`.
+/// if `l = size` then the outermost values of the window are higher.
+/// if `l = size + 1` then the outermost values of the window are even higher.
 /// # Panics
-/// panics unless `1 < size`
-pub fn triangular_iter<T>(size: usize, l: usize) -> TriangularWindowIter<T>
-    where T: From<usize> + Signed + Sub<T, Output=T> + Div<T, Output=T>
-{
-    assert!(1 < size);
-    TriangularWindowIter::<T> {
-        l: l,
+/// panics unless `0 < size`
+pub fn triangular_iter(size: usize) -> TriangularWindowIter {
+    assert!(0 < size);
+    TriangularWindowIter {
+        l: size,
         size: size,
         index: 0,
-        phantom: PhantomData,
     }
 }

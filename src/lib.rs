@@ -22,6 +22,11 @@ further away from the time being analyzed.
 to use add `apodize = "*"`
 to the `[dependencies]` section of your `Cargo.toml` and call `extern crate apodize;` in your code.
 
+all functions use `f64`s.
+previously they were generic over the floating type used.
+this was removed because it introduced a lot of complexity.
+if you need `f32`s just `.map(|x| x as f32)` over the iterator.
+
 ## example
 
 you will most likely want to collect the yielded values

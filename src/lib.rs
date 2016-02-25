@@ -44,10 +44,7 @@ use apodize::{hanning_iter};
 fn main() {
     // create a hanning window iterator of size 7
     // and collect the values it yields in an nalgebra::DVec.
-    // hanning_iter is generic over the type
-    // of floating point number yielded (f32 or f64).
-    // we use f64 here.
-    let window = hanning_iter::<f64>(7).collect::<DVec<f64>>();
+    let window = hanning_iter(7).collect::<DVec<_>>();
 
     assert_approx_eq_ulps!(
         window,
@@ -82,14 +79,16 @@ fn main() {
 ```
 */
 
-extern crate num;
-use num::traits::{Float, Signed, FromPrimitive};
+use std::f64::consts::PI;
 
-/// helper shorthand macro for shorter, more readable code:
-/// `from!(T, x)` -> `T::from(x).unwrap()`
-#[macro_export]
-macro_rules! from {
-    ($typ:ty, $val:expr) => { <$typ>::from($val).unwrap() }
+extern crate num;
+use num::{FromPrimitive};
+
+macro_rules! f64_from_usize {
+    ($val:expr) => {
+        <f64>::from_usize($val)
+            .expect("type `f64` can't represent a specific value of type `usize` on this architecture. use a smaller window size!");
+    }
 }
 
 /// build an `nalgebra::DVec` as easy as a `std::Vec`.
@@ -100,46 +99,28 @@ macro_rules! dvec {
     ($($x:expr,)*) => { dvec![$($x),*] };
 }
 
-/// the constant pi for generic floating point types.
-/// workaround until [associated
-/// constants](https://doc.rust-lang.org/book/associated-constants.html)
-/// are stable.
-pub trait CanRepresentPi {
-    fn pi() -> Self;
-}
-
-impl CanRepresentPi for f32 {
-    #[inline]
-    fn pi() -> Self { std::f32::consts::PI }
-}
-
-impl CanRepresentPi for f64 {
-    #[inline]
-    fn pi() -> Self { std::f64::consts::PI }
-}
-
 /// holds the window coefficients and
 /// iteration state of an iterator for a cosine window
-pub struct CosineWindowIter<T> {
+pub struct CosineWindowIter {
     /// coefficient `a` of the cosine window
-    pub a: T,
+    pub a: f64,
     /// coefficient `b` of the cosine window
-    pub b: T,
+    pub b: f64,
     /// coefficient `c` of the cosine window
-    pub c: T,
+    pub c: f64,
     /// coefficient `d` of the cosine window
-    pub d: T,
+    pub d: f64,
     /// the current `index` of the iterator
     pub index: usize,
     /// `size` of the cosine window
     pub size: usize,
 }
 
-impl<T: Float + CanRepresentPi> Iterator for CosineWindowIter<T> {
-    type Item = T;
+impl Iterator for CosineWindowIter {
+    type Item = f64;
 
     #[inline]
-    fn next(&mut self) -> Option<T> {
+    fn next(&mut self) -> Option<f64> {
         if self.index == self.size {
             return None;
         }
@@ -160,7 +141,7 @@ impl<T: Float + CanRepresentPi> Iterator for CosineWindowIter<T> {
     }
 }
 
-impl<T: Float + CanRepresentPi> ExactSizeIterator for CosineWindowIter<T> {
+impl ExactSizeIterator for CosineWindowIter {
     #[inline]
     fn len(&self) -> usize { self.size }
 }
@@ -173,20 +154,19 @@ impl<T: Float + CanRepresentPi> ExactSizeIterator for CosineWindowIter<T> {
 /// # Panics
 /// panics unless `1 < size`
 #[inline]
-pub fn cosine_at<T: Float + CanRepresentPi>(
-    a: T,
-    b: T,
-    c: T,
-    d: T,
+pub fn cosine_at(
+    a: f64,
+    b: f64,
+    c: f64,
+    d: f64,
     size: usize,
     index: usize
-) -> T
+) -> f64
 {
-    let pi: T = T::pi();
-    let x: T = (pi * from!(T, index)) / from!(T, size - 1);
-    let b_ = b * (from!(T, 2.) * x).cos();
-    let c_ = c * (from!(T, 4.) * x).cos();
-    let d_ = d * (from!(T, 6.) * x).cos();
+    let x = (PI * f64_from_usize!(index)) / (f64_from_usize!(size) - 1.);
+    let b_ = b * (2. * x).cos();
+    let c_ = c * (4. * x).cos();
+    let d_ = d * (6. * x).cos();
     (a - b_) + (c_ - d_)
 }
 
@@ -195,13 +175,13 @@ pub fn cosine_at<T: Float + CanRepresentPi>(
 /// with the coefficients `a`, `b`, `c` and `d`
 /// # Panics
 /// panics unless `1 < size`
-pub fn cosine_iter<T: Float + CanRepresentPi>(
-    a: T,
-    b: T,
-    c: T,
-    d: T,
+pub fn cosine_iter(
+    a: f64,
+    b: f64,
+    c: f64,
+    d: f64,
     size: usize)
-    -> CosineWindowIter<T> {
+    -> CosineWindowIter {
         assert!(1 < size);
         CosineWindowIter {
             a: a,
@@ -217,52 +197,32 @@ pub fn cosine_iter<T: Float + CanRepresentPi>(
 /// window](https://en.wikipedia.org/wiki/Window_function#Hann_.28Hanning.29_window) of `size`
 /// # Panics
 /// panics unless `1 < size`
-pub fn hanning_iter<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<T> {
-    cosine_iter::<T>(
-        from!(T, 0.5),
-        from!(T, 0.5),
-        from!(T, 0.),
-        from!(T, 0.),
-        size)
+pub fn hanning_iter(size: usize) -> CosineWindowIter {
+    cosine_iter(0.5, 0.5, 0., 0., size)
 }
 
 /// returns an iterator that yields the values for a [hamming
 /// window](https://en.wikipedia.org/wiki/Window_function#Hamming_window) of `size`
 /// # Panics
 /// panics unless `1 < size`
-pub fn hamming_iter<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<T> {
-    cosine_iter::<T>(
-        from!(T, 0.54),
-        from!(T, 0.46),
-        from!(T, 0.),
-        from!(T, 0.),
-        size)
+pub fn hamming_iter(size: usize) -> CosineWindowIter {
+    cosine_iter(0.54, 0.46, 0., 0., size)
 }
 
 /// returns an iterator that yields the values for a [blackman
 /// window](https://en.wikipedia.org/wiki/Window_function#Blackman_windows) of `size`
 /// # Panics
 /// panics unless `1 < size`
-pub fn blackman_iter<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<T> {
-    cosine_iter::<T>(
-        from!(T, 0.35875),
-        from!(T, 0.48829),
-        from!(T, 0.14128),
-        from!(T, 0.01168),
-        size)
+pub fn blackman_iter(size: usize) -> CosineWindowIter {
+    cosine_iter(0.35875, 0.48829, 0.14128, 0.01168, size)
 }
 
 /// returns an iterator that yields the values for a [nuttall
 /// window](https://en.wikipedia.org/wiki/Window_function#Nuttall_window.2C_continuous_first_derivative) of `size`
 /// # Panics
 /// panics unless `1 < size`
-pub fn nuttall_iter<T: Float + CanRepresentPi>(size: usize) -> CosineWindowIter<T> {
-    cosine_iter::<T>(
-        from!(T, 0.355768),
-        from!(T, 0.487396),
-        from!(T, 0.144232),
-        from!(T, 0.012604),
-        size)
+pub fn nuttall_iter(size: usize) -> CosineWindowIter {
+    cosine_iter(0.355768, 0.487396, 0.144232, 0.012604, size)
 }
 
 /// holds the iteration state of an iterator for a triangular window
@@ -272,12 +232,6 @@ pub struct TriangularWindowIter {
     pub index: usize,
     /// `size` of the triangular window
     pub size: usize,
-}
-
-macro_rules! f64_from_usize {
-    ($val:expr) => {
-        <f64>::from_usize($val).expect("can't cast this usize to f64 on this architecture");
-    }
 }
 
 /// returns the value of the

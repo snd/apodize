@@ -105,7 +105,7 @@ fn test_hamming() {
 #[test]
 fn test_blackman() {
     assert_approx_eq_ulps!(
-        apodize::blackman_iter(2).collect::<DVec<f64>>(),
+        apodize::blackman_iter(2).collect::<DVec<_>>(),
         dvec![
             0.000060000000000004494,
             0.000060000000000004494
@@ -113,7 +113,7 @@ fn test_blackman() {
         UNITS_IN_LAST_PLACE);
 
     assert_approx_eq_ulps!(
-        apodize::blackman_iter(3).collect::<DVec<f64>>(),
+        apodize::blackman_iter(3).collect::<DVec<_>>(),
         dvec![
             0.000060000000000004494,
             1.0,
@@ -122,7 +122,7 @@ fn test_blackman() {
         UNITS_IN_LAST_PLACE);
 
     assert_approx_eq_ulps!(
-        apodize::blackman_iter(10).collect::<DVec<f64>>(),
+        apodize::blackman_iter(10).collect::<DVec<_>>(),
         dvec![
             0.000060000000000004494,
             0.015071173410218106,
@@ -172,22 +172,22 @@ fn test_nuttall() {
 #[test]
 fn test_triangular() {
     assert_approx_eq_ulps!(
-        apodize::triangular_iter(1).collect::<DVec<f64>>(),
+        apodize::triangular_iter(1).collect::<DVec<_>>(),
         dvec![1.0],
         UNITS_IN_LAST_PLACE);
 
     assert_approx_eq_ulps!(
-        apodize::triangular_iter(2).collect::<DVec<f64>>(),
+        apodize::triangular_iter(2).collect::<DVec<_>>(),
         dvec![0.5, 0.5],
         UNITS_IN_LAST_PLACE);
 
     assert_approx_eq_ulps!(
-        apodize::triangular_iter(3).collect::<DVec<f64>>(),
+        apodize::triangular_iter(3).collect::<DVec<_>>(),
         dvec![0.3333333333333333, 1.0, 0.3333333333333333],
         UNITS_IN_LAST_PLACE);
 
     assert_approx_eq_ulps!(
-        apodize::triangular_iter(10).collect::<DVec<f64>>(),
+        apodize::triangular_iter(10).collect::<DVec<_>>(),
         dvec![
             0.09999999999999998,
             0.30000000000000004,
@@ -202,7 +202,7 @@ fn test_triangular() {
         ],
         UNITS_IN_LAST_PLACE);
     assert_approx_eq_ulps!(
-        apodize::triangular_iter(11).collect::<DVec<f64>>(),
+        apodize::triangular_iter(11).collect::<DVec<_>>(),
         dvec![
             0.09090909090909094,
             0.2727272727272727,

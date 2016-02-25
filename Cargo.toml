@@ -1,7 +1,7 @@
 [package]
 authors = ["Maximilian Krüger <kruemaxi@gmail.com>"]
 name = "apodize"
-version = "0.1.2"
+version = "0.2.0"
 description = "iterators that yield generalized cosine, hanning, hamming, blackman and nuttall windows"
 documentation = "https://snd.github.io/apodize/apodize/index.html"
 homepage = "https://github.com/snd/apodize"

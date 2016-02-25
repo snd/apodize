@@ -11,5 +11,5 @@ keywords = ["iterator", "window", "hanning", "hamming", "blackman"]
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-num = "0.1.30"
+num = "0.1.31"
 nalgebra = "0.5.1"

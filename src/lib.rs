@@ -106,6 +106,7 @@ macro_rules! dvec {
 
 /// holds the window coefficients and
 /// iteration state of an iterator for a cosine window
+#[derive(Clone, Debug)]
 pub struct CosineWindowIter {
     /// coefficient `a` of the cosine window
     pub a: f64,
@@ -231,6 +232,7 @@ pub fn nuttall_iter(size: usize) -> CosineWindowIter {
 }
 
 /// holds the iteration state of an iterator for a triangular window
+#[derive(Clone, Debug)]
 pub struct TriangularWindowIter {
     pub l: usize,
     /// the current `index` of the iterator

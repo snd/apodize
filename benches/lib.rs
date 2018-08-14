@@ -4,9 +4,6 @@ use std::ops::Mul;
 
 extern crate test;
 
-extern crate nalgebra;
-use nalgebra::{DVec};
-
 extern crate apodize;
 
 #[bench]
@@ -27,15 +24,6 @@ fn bench_cosine(bencher: &mut test::Bencher) {
 fn bench_collect_hanning_iter_1024(bencher: &mut test::Bencher) {
     bencher.iter(|| {
         apodize::hanning_iter(1024).collect::<Vec<_>>()
-    });
-}
-
-#[bench]
-fn bench_multiply_hanning_window_1024_with_data_as_dvec(bencher: &mut test::Bencher) {
-    let window = apodize::hanning_iter(1024).collect::<DVec<_>>();
-    let data = (0..1024).map(|x| x as f64).collect::<DVec<_>>();
-    bencher.iter(|| {
-        window.clone().mul(data.clone())
     });
 }
 

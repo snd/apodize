@@ -39,47 +39,47 @@ here is an example of that for a hanning window (hamming, blackman and nuttall a
 use std::ops::Mul;
 
 #[macro_use]
-extern crate nalgebra;
-use nalgebra::{ApproxEq, DVec};
+extern crate approx;
 
-#[macro_use]
 extern crate apodize;
 use apodize::{hanning_iter};
 
 fn main() {
     // create a hanning window iterator of size 7
-    // and collect the values it yields in an nalgebra::DVec.
-    let window = hanning_iter(7).collect::<DVec<_>>();
+    // and collect the values it yields in an nalgebra::DVector.
+    let window = hanning_iter(7).collect::<Vec<f64>>();
+    let expected = vec![
+        0.0,
+        0.24999999999999994,
+        0.7499999999999999,
+        1.0,
+        0.7500000000000002,
+        0.25,
+        0.0
+    ];
 
-    assert_approx_eq_ulps!(
-        window,
-        dvec![
-            0.0,
-            0.24999999999999994,
-            0.7499999999999999,
-            1.0,
-            0.7500000000000002,
-            0.25,
-            0.0],
-        10);
+    assert_ulps_eq!(window.as_slice(), expected.as_slice(), max_ulps = 10);
 
     // some data we want to apodize (multiply with the window)
-    let data: DVec<f64> = dvec![1., 2., 3., 4., 5., 6., 7.];
+    let data: Vec<f64> = vec![1., 2., 3., 4., 5., 6., 7.];
 
     // multiply data with window
-    let windowed_data = window.mul(data);
+    let mut windowed_data = Vec::with_capacity(data.len());
+    for i in 0..window.len() {
+        windowed_data.push(window[i] * data[i]);
+    }
 
-    assert_approx_eq_ulps!(
-        windowed_data,
-        dvec![
-            0.0,
-            0.4999999999999999,
-            2.2499999999999996,
-            4.0,
-            3.750000000000001,
-            1.5,
-            0.0],
-        10);
+    let expected = vec![
+        0.0,
+        0.4999999999999999,
+        2.2499999999999996,
+        4.0,
+        3.750000000000001,
+        1.5,
+        0.0
+    ];
+
+    assert_ulps_eq!(windowed_data.as_slice(), expected.as_slice(), max_ulps = 10);
 }
 ```
 */
@@ -94,14 +94,6 @@ macro_rules! f64_from_usize {
         <f64>::from_usize($val)
             .expect("type `f64` can't represent a specific value of type `usize` on this architecture. use a smaller window size!");
     }
-}
-
-/// build an `nalgebra::DVec` as easy as a `std::Vec`.
-/// for shorter, more readable code in tests and examples.
-#[macro_export]
-macro_rules! dvec {
-    ($( $x:expr ),*) => { DVec {at: vec![$($x),*]} };
-    ($($x:expr,)*) => { dvec![$($x),*] };
 }
 
 /// holds the window coefficients and

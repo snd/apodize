@@ -1,7 +1,5 @@
 #![feature(test)]
 
-use std::ops::Mul;
-
 extern crate test;
 
 extern crate apodize;

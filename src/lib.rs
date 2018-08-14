@@ -36,8 +36,6 @@ data vectors to apodize them.
 here is an example of that for a hanning window (hamming, blackman and nuttall are analogous).
 
 ```
-use std::ops::Mul;
-
 #[macro_use]
 extern crate approx;
 

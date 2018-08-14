@@ -83,16 +83,6 @@ fn main() {
 
 use std::f64::consts::PI;
 
-extern crate num;
-use num::FromPrimitive;
-
-macro_rules! f64_from_usize {
-    ($val:expr) => {
-        <f64>::from_usize($val)
-            .expect("type `f64` can't represent a specific value of type `usize` on this architecture. use a smaller window size!");
-    }
-}
-
 /// holds the window coefficients and
 /// iteration state of an iterator for a cosine window
 #[derive(Clone, Debug)]
@@ -154,7 +144,7 @@ pub fn cosine_at(
     size: usize,
     index: usize,
 ) -> f64 {
-    let x = (PI * f64_from_usize!(index)) / (f64_from_usize!(size) - 1.);
+    let x = (PI * index as f64) / (size - 1) as f64;
     let b_ = b * (2. * x).cos();
     let c_ = c * (4. * x).cos();
     let d_ = d * (6. * x).cos();
@@ -236,9 +226,7 @@ pub fn triangular_at(l: usize, size: usize, index: usize) -> f64 {
     // ends with zeros if l == size - 1
     // if l == size - 1 && index == 0 then 1 - 1 / 1 == 0
     // if l == size - 1 && index == size - 1 then 1 - 0 / 1 == 0
-    1. - ((f64_from_usize!(index) - (f64_from_usize!(size) - 1.) / 2.)
-        / (f64_from_usize!(l) / 2.))
-        .abs()
+    1. - ((index as f64 - (size - 1) as f64 / 2.) / (l as f64 / 2.)).abs()
 }
 
 impl Iterator for TriangularWindowIter {

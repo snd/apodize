@@ -1,7 +1,5 @@
 # apodize
 
-*status: working. tested. api still in flux.*
-
 [![Build Status](https://travis-ci.org/snd/apodize.svg?branch=master)](https://travis-ci.org/snd/apodize/branches)
 [![](https://meritbadge.herokuapp.com/apodize)](https://crates.io/crates/apodize)
 
@@ -26,7 +24,7 @@ being analyzed have higher weight than the signal
 further away from the time being analyzed.
 
 to use add `apodize = "*"`
-to the `[dependencies]` section of your `Cargo.toml` and call `extern crate apodize;` in your code.
+to the `[dependencies]` section of your `Cargo.toml` and `extern crate apodize;` to your code.
 
 ## [read the documentation for an example and more !](https://snd.github.io/apodize/apodize/index.html)
 

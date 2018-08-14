@@ -20,11 +20,11 @@ being analyzed have higher weight than the signal
 further away from the time being analyzed.
 
 to use add `apodize = "*"`
-to the `[dependencies]` section of your `Cargo.toml` and call `extern crate apodize;` in your code.
+to the `[dependencies]` section of your `Cargo.toml` and `extern crate apodize;` to your code.
 
-all functions use `f64`s.
+all iterators yield `f64`s.
 previously they were generic over the floating type used.
-this was removed because it introduced a lot of complexity.
+this was removed because it introduced complexity.
 if you need `f32`s just `.map(|x| x as f32)` over the iterator.
 
 ## example
@@ -46,8 +46,9 @@ use apodize::{hanning_iter};
 
 fn main() {
     // create a hanning window iterator of size 7
-    // and collect the values it yields in an nalgebra::DVector.
+    // and collect the values it yields in a Vec
     let window = hanning_iter(7).collect::<Vec<f64>>();
+
     let expected = vec![
         0.0,
         0.24999999999999994,
@@ -57,7 +58,6 @@ fn main() {
         0.25,
         0.0
     ];
-
     assert_ulps_eq!(window.as_slice(), expected.as_slice(), max_ulps = 10);
 
     // some data we want to apodize (multiply with the window)
@@ -78,7 +78,6 @@ fn main() {
         1.5,
         0.0
     ];
-
     assert_ulps_eq!(windowed_data.as_slice(), expected.as_slice(), max_ulps = 10);
 }
 ```

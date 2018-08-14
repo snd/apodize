@@ -1,26 +1,16 @@
 sudo: true
 language: rust
 rust:
-  - stable
-  - beta
-  - nightly
+- stable
+- beta
+- nightly
 matrix:
   allow_failures:
-    - rust: nightly
+  - rust: nightly
 script:
-  # travis default rust test script
-  - cargo build --verbose
-  - cargo test --verbose
-  # benches use the test feature which is only available on nightly
-  # run benches once per build to detect performance regressions
-  - if [ "$TRAVIS_RUST_VERSION" = "nightly" ] ; then
-     cargo bench --verbose;
-    fi
-env:
-  global:
-    - secure: "BZEGoEQuRqwDrxoUANH8TgbrNOld5Tga0y8eo3HVIZp8SNX8R8Ro4NhnFkYcQrB55vRqFI9KuLs1/vT1E08gUEXDxQ/LSOQB4+aE5PIQ9Q59ZXafXj5ZyEvMXF/pPzDNh5XxvSs0cFVLp29jB3ezNrkRA5+Bwl53grE227rYUuFoRfHpn2qbIkf1S9174wo+jwiXcrD4HEltCxNzxp8MxI1sHN19dz9VZKQEiiGWf1+1B6ymG77eJaRBnErovHZ/+GeLDFwTWBR3kyYW5S9VVADajMYXoTWsad03xdFj/1FXsv2lY8db+8zDYlFIYvYIXH14K81+yv2PBGdpo74lRkV4DV30StxvOZa7BvBTNfble6wPjusVbYL5pVlZRRgD6JDYiUePYfJ+5JATbf0jd1z3uvedDiZTCoLsDtEg/Y4k0dz65bjPQu5tx2Qgij3anDL6x5mr9KWt9NBaImKEdZBONMlffEnIV+bHyevf+4jETz4Ha67i9siQWkdYGeielkPOmbIWarGgkpPFMvs7wKcNYlrLRqtVKLY5OzrW586G4bdzZZ8JSA4gpeBvwmdOWAZd5V1y5HP8r/b1LaOGDdVOV5Vt0ULLbbQECldewOoG/6RRg1drOLh1HVROJsFJzmticX45iEQW1EDW+GU5/krv6Ng/DofI+reEozA4xXo="
-# after success build rust documentation and push it to gh-pages branch
-# only do this for the stable branch (once per build)
+- cargo build --verbose
+- cargo test --verbose
+- if [ "$TRAVIS_RUST_VERSION" = "nightly" ] ; then cargo bench --verbose; fi
 after_success: |
   if [ "$TRAVIS_RUST_VERSION" = "stable" ] ; then
     cargo doc --no-deps && \
@@ -28,3 +18,6 @@ after_success: |
     ghp-import -n target/doc && \
     git push -qf https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
   fi
+env:
+  global:
+    secure: OjTiQD2E+a8e39fc3DJkQvLuUUXnULGBqv3bWl1tjI7bCsiy32UlkGuL+6+7wS370j4Slj5Gf07s79ptW0yuKiT0uM4bz9FYD/CAmxpo+ilFhxeK+Db5q/khLH20IF3lOoxwI0EmjTknDue7p+juZLuPHlH1yxJnBwbtWCXba+PO5L2uNFKQJr1yDHbO2lBxidTClUpul9W1yGuh/w0eH9W3+MdmDOKdSeaUbsQtyZOFLt7K5eMrmbyN88QDCIMRbFiuBzvSHTputYi+TioeUsJ7QFDz4g9sUEHE3/hg/XsUxn0VvuvEFi/VnkCNNdN30CS8HPwVdAxK+CLfU1/lVI/hVl7zIfUo55ZeE8cFHu+r1O+7/eB+zjhUE6+Db42jDvTigw79TIqh2bwSu0B1f1xYbZQu8zAS6+t7UDED1/KyDFjIgkrDMMFJ3m261VL+4o29SHJomBR1ztlWhBPQqPsOlA+HO6PYgLdPu0StdcglLS2zU4xMzads01clYI/oa2ZagVJLlbqVf6tj3ukKOVwDFV+hBC960p5iBZ0SEkfiPSQeDno8Riz8/T5Kzz7x023xYqbMBYAOSnpmAkmwEt+5XDFIaP8eEBLbnD3e3HAXhRoslQ35kyjwaAtfyTPsCN8dDVARjUW53IQm6xlln7aWBFnZCsnAJ9F6Tdo3TxU=

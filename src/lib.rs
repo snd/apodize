@@ -39,47 +39,47 @@ here is an example of that for a hanning window (hamming, blackman and nuttall a
 use std::ops::Mul;
 
 #[macro_use]
-extern crate nalgebra;
-use nalgebra::{ApproxEq, DVec};
+extern crate approx;
 
-#[macro_use]
 extern crate apodize;
 use apodize::{hanning_iter};
 
 fn main() {
     // create a hanning window iterator of size 7
-    // and collect the values it yields in an nalgebra::DVec.
-    let window = hanning_iter(7).collect::<DVec<_>>();
+    // and collect the values it yields in an nalgebra::DVector.
+    let window = hanning_iter(7).collect::<Vec<f64>>();
+    let expected = vec![
+        0.0,
+        0.24999999999999994,
+        0.7499999999999999,
+        1.0,
+        0.7500000000000002,
+        0.25,
+        0.0
+    ];
 
-    assert_approx_eq_ulps!(
-        window,
-        dvec![
-            0.0,
-            0.24999999999999994,
-            0.7499999999999999,
-            1.0,
-            0.7500000000000002,
-            0.25,
-            0.0],
-        10);
+    assert_ulps_eq!(window.as_slice(), expected.as_slice(), max_ulps = 10);
 
     // some data we want to apodize (multiply with the window)
-    let data: DVec<f64> = dvec![1., 2., 3., 4., 5., 6., 7.];
+    let data: Vec<f64> = vec![1., 2., 3., 4., 5., 6., 7.];
 
     // multiply data with window
-    let windowed_data = window.mul(data);
+    let mut windowed_data = Vec::with_capacity(data.len());
+    for i in 0..window.len() {
+        windowed_data.push(window[i] * data[i]);
+    }
 
-    assert_approx_eq_ulps!(
-        windowed_data,
-        dvec![
-            0.0,
-            0.4999999999999999,
-            2.2499999999999996,
-            4.0,
-            3.750000000000001,
-            1.5,
-            0.0],
-        10);
+    let expected = vec![
+        0.0,
+        0.4999999999999999,
+        2.2499999999999996,
+        4.0,
+        3.750000000000001,
+        1.5,
+        0.0
+    ];
+
+    assert_ulps_eq!(windowed_data.as_slice(), expected.as_slice(), max_ulps = 10);
 }
 ```
 */
@@ -87,7 +87,7 @@ fn main() {
 use std::f64::consts::PI;
 
 extern crate num;
-use num::{FromPrimitive};
+use num::FromPrimitive;
 
 macro_rules! f64_from_usize {
     ($val:expr) => {
@@ -96,16 +96,9 @@ macro_rules! f64_from_usize {
     }
 }
 
-/// build an `nalgebra::DVec` as easy as a `std::Vec`.
-/// for shorter, more readable code in tests and examples.
-#[macro_export]
-macro_rules! dvec {
-    ($( $x:expr ),*) => { DVec {at: vec![$($x),*]} };
-    ($($x:expr,)*) => { dvec![$($x),*] };
-}
-
 /// holds the window coefficients and
 /// iteration state of an iterator for a cosine window
+#[derive(Clone, Debug)]
 pub struct CosineWindowIter {
     /// coefficient `a` of the cosine window
     pub a: f64,
@@ -131,12 +124,7 @@ impl Iterator for CosineWindowIter {
         }
         let index = self.index;
         self.index += 1;
-        Some(cosine_at(self.a,
-                       self.b,
-                       self.c,
-                       self.d,
-                       self.size,
-                       index))
+        Some(cosine_at(self.a, self.b, self.c, self.d, self.size, index))
     }
 
     #[inline]
@@ -148,7 +136,9 @@ impl Iterator for CosineWindowIter {
 
 impl ExactSizeIterator for CosineWindowIter {
     #[inline]
-    fn len(&self) -> usize { self.size }
+    fn len(&self) -> usize {
+        self.size
+    }
 }
 
 /// returns the value of the [cosine
@@ -165,9 +155,8 @@ pub fn cosine_at(
     c: f64,
     d: f64,
     size: usize,
-    index: usize
-) -> f64
-{
+    index: usize,
+) -> f64 {
     let x = (PI * f64_from_usize!(index)) / (f64_from_usize!(size) - 1.);
     let b_ = b * (2. * x).cos();
     let c_ = c * (4. * x).cos();
@@ -185,18 +174,18 @@ pub fn cosine_iter(
     b: f64,
     c: f64,
     d: f64,
-    size: usize)
-    -> CosineWindowIter {
-        assert!(1 < size);
-        CosineWindowIter {
-            a: a,
-            b: b,
-            c: c,
-            d: d,
-            index: 0,
-            size: size,
-        }
+    size: usize,
+) -> CosineWindowIter {
+    assert!(1 < size);
+    CosineWindowIter {
+        a: a,
+        b: b,
+        c: c,
+        d: d,
+        index: 0,
+        size: size,
     }
+}
 
 /// returns an iterator that yields the values for a [hanning
 /// window](https://en.wikipedia.org/wiki/Window_function#Hann_.28Hanning.29_window) of `size`
@@ -231,6 +220,7 @@ pub fn nuttall_iter(size: usize) -> CosineWindowIter {
 }
 
 /// holds the iteration state of an iterator for a triangular window
+#[derive(Clone, Debug)]
 pub struct TriangularWindowIter {
     pub l: usize,
     /// the current `index` of the iterator
@@ -249,15 +239,12 @@ pub fn triangular_at(l: usize, size: usize, index: usize) -> f64 {
     // ends with zeros if l == size - 1
     // if l == size - 1 && index == 0 then 1 - 1 / 1 == 0
     // if l == size - 1 && index == size - 1 then 1 - 0 / 1 == 0
-    1. - (
-        (f64_from_usize!(index) - (f64_from_usize!(size) - 1.) / 2.)
-        /
-        (f64_from_usize!(l) / 2.)
-    ).abs()
+    1. - ((f64_from_usize!(index) - (f64_from_usize!(size) - 1.) / 2.)
+        / (f64_from_usize!(l) / 2.))
+        .abs()
 }
 
-impl Iterator for TriangularWindowIter
-{
+impl Iterator for TriangularWindowIter {
     type Item = f64;
 
     #[inline]
@@ -279,7 +266,9 @@ impl Iterator for TriangularWindowIter
 
 impl ExactSizeIterator for TriangularWindowIter {
     #[inline]
-    fn len(&self) -> usize { self.size }
+    fn len(&self) -> usize {
+        self.size
+    }
 }
 
 /// returns an iterator that yields the values for a [triangular

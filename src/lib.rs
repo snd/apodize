@@ -1,6 +1,6 @@
 /*!
 
-**rust iterators that yield
+**very simple rust iterators that yield
 [generalized cosine](https://snd.github.io/apodize/apodize/fn.cosine_iter.html),
 [hanning](https://snd.github.io/apodize/apodize/fn.hanning_iter.html),
 [hamming](https://snd.github.io/apodize/apodize/fn.hamming_iter.html),

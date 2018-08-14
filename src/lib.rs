@@ -40,12 +40,11 @@ here is an example of that for a hanning window (hamming, blackman and nuttall a
 extern crate approx;
 
 extern crate apodize;
-use apodize::{hanning_iter};
 
 fn main() {
     // create a hanning window iterator of size 7
     // and collect the values it yields in a Vec
-    let window = hanning_iter(7).collect::<Vec<f64>>();
+    let window = apodize::hanning_iter(7).collect::<Vec<f64>>();
 
     let expected = vec![
         0.0,

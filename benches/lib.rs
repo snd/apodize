@@ -10,25 +10,20 @@ extern crate apodize;
 fn bench_cosine(bencher: &mut test::Bencher) {
     bencher.iter(|| {
         apodize::cosine_at(
-            0.355768,
-            0.487396,
-            0.144232,
-            0.012604,
-            1024,
-            400
+            0.355768, 0.487396, 0.144232, 0.012604, 1024, 400,
         )
     });
 }
 
 #[bench]
 fn bench_collect_hanning_iter_1024(bencher: &mut test::Bencher) {
-    bencher.iter(|| {
-        apodize::hanning_iter(1024).collect::<Vec<_>>()
-    });
+    bencher.iter(|| apodize::hanning_iter(1024).collect::<Vec<_>>());
 }
 
 #[bench]
-fn bench_multiply_hanning_window_1024_with_data_as_vec_iter(bencher: &mut test::Bencher) {
+fn bench_multiply_hanning_window_1024_with_data_as_vec_iter(
+    bencher: &mut test::Bencher,
+) {
     let window = apodize::hanning_iter(1024).collect::<Vec<_>>();
     let data = (0..1024).map(|x| x as f64).collect::<Vec<_>>();
     bencher.iter(|| {
@@ -41,7 +36,9 @@ fn bench_multiply_hanning_window_1024_with_data_as_vec_iter(bencher: &mut test::
 }
 
 #[bench]
-fn bench_multiply_hanning_window_1024_with_data_as_vec_index(bencher: &mut test::Bencher) {
+fn bench_multiply_hanning_window_1024_with_data_as_vec_index(
+    bencher: &mut test::Bencher,
+) {
     let window = apodize::hanning_iter(1024).collect::<Vec<_>>();
     let data = (0..1024).map(|x| x as f64).collect::<Vec<_>>();
     bencher.iter(|| {

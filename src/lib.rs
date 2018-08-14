@@ -87,7 +87,7 @@ fn main() {
 use std::f64::consts::PI;
 
 extern crate num;
-use num::{FromPrimitive};
+use num::FromPrimitive;
 
 macro_rules! f64_from_usize {
     ($val:expr) => {
@@ -124,12 +124,7 @@ impl Iterator for CosineWindowIter {
         }
         let index = self.index;
         self.index += 1;
-        Some(cosine_at(self.a,
-                       self.b,
-                       self.c,
-                       self.d,
-                       self.size,
-                       index))
+        Some(cosine_at(self.a, self.b, self.c, self.d, self.size, index))
     }
 
     #[inline]
@@ -141,7 +136,9 @@ impl Iterator for CosineWindowIter {
 
 impl ExactSizeIterator for CosineWindowIter {
     #[inline]
-    fn len(&self) -> usize { self.size }
+    fn len(&self) -> usize {
+        self.size
+    }
 }
 
 /// returns the value of the [cosine
@@ -158,9 +155,8 @@ pub fn cosine_at(
     c: f64,
     d: f64,
     size: usize,
-    index: usize
-) -> f64
-{
+    index: usize,
+) -> f64 {
     let x = (PI * f64_from_usize!(index)) / (f64_from_usize!(size) - 1.);
     let b_ = b * (2. * x).cos();
     let c_ = c * (4. * x).cos();
@@ -178,18 +174,18 @@ pub fn cosine_iter(
     b: f64,
     c: f64,
     d: f64,
-    size: usize)
-    -> CosineWindowIter {
-        assert!(1 < size);
-        CosineWindowIter {
-            a: a,
-            b: b,
-            c: c,
-            d: d,
-            index: 0,
-            size: size,
-        }
+    size: usize,
+) -> CosineWindowIter {
+    assert!(1 < size);
+    CosineWindowIter {
+        a: a,
+        b: b,
+        c: c,
+        d: d,
+        index: 0,
+        size: size,
     }
+}
 
 /// returns an iterator that yields the values for a [hanning
 /// window](https://en.wikipedia.org/wiki/Window_function#Hann_.28Hanning.29_window) of `size`
@@ -243,15 +239,12 @@ pub fn triangular_at(l: usize, size: usize, index: usize) -> f64 {
     // ends with zeros if l == size - 1
     // if l == size - 1 && index == 0 then 1 - 1 / 1 == 0
     // if l == size - 1 && index == size - 1 then 1 - 0 / 1 == 0
-    1. - (
-        (f64_from_usize!(index) - (f64_from_usize!(size) - 1.) / 2.)
-        /
-        (f64_from_usize!(l) / 2.)
-    ).abs()
+    1. - ((f64_from_usize!(index) - (f64_from_usize!(size) - 1.) / 2.)
+        / (f64_from_usize!(l) / 2.))
+        .abs()
 }
 
-impl Iterator for TriangularWindowIter
-{
+impl Iterator for TriangularWindowIter {
     type Item = f64;
 
     #[inline]
@@ -273,7 +266,9 @@ impl Iterator for TriangularWindowIter
 
 impl ExactSizeIterator for TriangularWindowIter {
     #[inline]
-    fn len(&self) -> usize { self.size }
+    fn len(&self) -> usize {
+        self.size
+    }
 }
 
 /// returns an iterator that yields the values for a [triangular

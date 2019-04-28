@@ -1,9 +1,11 @@
 # apodize
 
-[![Build Status](https://travis-ci.org/snd/apodize.svg?branch=master)](https://travis-ci.org/snd/apodize/branches)
-[![](https://meritbadge.herokuapp.com/apodize)](https://crates.io/crates/apodize)
+[![Build Status][build-image]][build-link]
+[![Crate][crate-img]][crate-link]
+[![Docs][docs-img]][docs-link]
+[![License][license-image]][license-link]
 
-**very simple [rust](https://www.rust-lang.org/)
+very simple [rust](https://www.rust-lang.org/)
 iterators that yield
 [generalized cosine](https://snd.github.io/apodize/apodize/fn.cosine_iter.html),
 [hanning](https://snd.github.io/apodize/apodize/fn.hanning_iter.html),
@@ -12,22 +14,31 @@ iterators that yield
 [nuttall](https://snd.github.io/apodize/apodize/fn.nuttall_iter.html)
 and
 [triangular](https://snd.github.io/apodize/apodize/fn.triangular_iter.html)
-windows**
+windows
 
 useful for
-smoothing the sharp discontinuities at the edges (beginning and end)
-of each slice of samples when doing a
+smoothing the sharp discontinuities at the beginning and end
+of a slice of samples when doing a
 [short time fourier transform](https://en.wikipedia.org/wiki/Short-time_Fourier_transform).
 windowing also improves temporal resolution by making
 the signal near the time
 being analyzed have higher weight than the signal
 further away from the time being analyzed.
 
-to use add `apodize = "*"`
-to the `[dependencies]` section of your `Cargo.toml` and `extern crate apodize;` to your code.
-
-## [read the documentation for an example and more !](https://snd.github.io/apodize/apodize/index.html)
+[Documentation and Example][docs-link]
 
 ### [contributing](contributing.md)
 
 ### licensed under either of [apache-2.0](LICENSE-APACHE) ([tl;dr](https://tldrlegal.com/license/apache-license-2.0-(apache-2.0))) or [MIT](LICENSE-MIT) ([tl;dr](https://tldrlegal.com/license/mit-license)) at your option
+
+[build-image]: https://secure.travis-ci.org/snd/apodize.svg?branch=master
+[build-link]: https://travis-ci.org/snd/apodize
+
+[crate-img]: https://img.shields.io/crates/v/apodize.svg
+[crate-link]: https://crates.io/crates/apodize
+
+[docs-img]: https://docs.rs/apodize/badge.svg
+[docs-link]: https://docs.rs/apodize/
+
+[license-image]: https://img.shields.io/badge/license-Apache2.0/MIT-blue.svg
+[license-link]: https://github.com/snd/apodize/blob/master/LICENSE-MIT

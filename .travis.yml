@@ -2,23 +2,12 @@ language: rust
 rust:
   - stable
   - beta
-install:
+before_script:
   - rustup component add clippy
   - rustup component add rustfmt
-matrix:
-  - include:
-    - name: check-rustfmt
-      script:
-        - cargo fmt -- --check
-    - name: clippy
-      script:
-        - cargo clippy
-    - name: build
-      script:
-        - cargo build --release
-    - name: test
-      script:
-        - cargo test --release
-    - name: bench
-      script:
-        - cargo bench
+script:
+  - cargo fmt -- --check
+  - cargo clippy
+  - cargo build --release
+  - cargo test
+  - cargo bench

@@ -8,6 +8,7 @@ homepage = "https://github.com/snd/apodize"
 repository = "https://github.com/snd/apodize.git"
 readme = "README.md"
 keywords = ["iterator", "window", "hanning", "hamming", "blackman"]
+edition = "2018"
 license = "MIT OR Apache-2.0"
 
 [dependencies]

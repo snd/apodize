@@ -11,7 +11,5 @@ keywords = ["iterator", "window", "hanning", "hamming", "blackman"]
 edition = "2018"
 license = "MIT OR Apache-2.0"
 
-[dependencies]
-
 [dev-dependencies]
-approx = "0.3.0"
+approx = "0.3.2"

@@ -133,14 +133,7 @@ impl ExactSizeIterator for CosineWindowIter {
 /// # Panics
 /// panics unless `1 < size`
 #[inline]
-pub fn cosine_at(
-    a: f64,
-    b: f64,
-    c: f64,
-    d: f64,
-    size: usize,
-    index: usize,
-) -> f64 {
+pub fn cosine_at(a: f64, b: f64, c: f64, d: f64, size: usize, index: usize) -> f64 {
     let x = (PI * index as f64) / (size - 1) as f64;
     let b_ = b * (2. * x).cos();
     let c_ = c * (4. * x).cos();
@@ -153,13 +146,7 @@ pub fn cosine_at(
 /// with the coefficients `a`, `b`, `c` and `d`
 /// # Panics
 /// panics unless `1 < size`
-pub fn cosine_iter(
-    a: f64,
-    b: f64,
-    c: f64,
-    d: f64,
-    size: usize,
-) -> CosineWindowIter {
+pub fn cosine_iter(a: f64, b: f64, c: f64, d: f64, size: usize) -> CosineWindowIter {
     assert!(1 < size);
     CosineWindowIter {
         a: a,

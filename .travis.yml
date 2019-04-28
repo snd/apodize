@@ -1,23 +1,24 @@
-sudo: true
 language: rust
 rust:
-- stable
-- beta
-- nightly
+  - stable
+  - beta
+install:
+  - rustup component add clippy
+  - rustup component add rustfmt
 matrix:
-  allow_failures:
-  - rust: nightly
-script:
-- cargo build --verbose
-- cargo test --verbose
-- if [ "$TRAVIS_RUST_VERSION" = "nightly" ] ; then cargo bench --verbose; fi
-after_success: |
-  if [ "$TRAVIS_RUST_VERSION" = "stable" ] ; then
-    cargo doc --no-deps && \
-    sudo pip install ghp-import && \
-    ghp-import -n target/doc && \
-    git push -qf https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
-  fi
-env:
-  global:
-    secure: OjTiQD2E+a8e39fc3DJkQvLuUUXnULGBqv3bWl1tjI7bCsiy32UlkGuL+6+7wS370j4Slj5Gf07s79ptW0yuKiT0uM4bz9FYD/CAmxpo+ilFhxeK+Db5q/khLH20IF3lOoxwI0EmjTknDue7p+juZLuPHlH1yxJnBwbtWCXba+PO5L2uNFKQJr1yDHbO2lBxidTClUpul9W1yGuh/w0eH9W3+MdmDOKdSeaUbsQtyZOFLt7K5eMrmbyN88QDCIMRbFiuBzvSHTputYi+TioeUsJ7QFDz4g9sUEHE3/hg/XsUxn0VvuvEFi/VnkCNNdN30CS8HPwVdAxK+CLfU1/lVI/hVl7zIfUo55ZeE8cFHu+r1O+7/eB+zjhUE6+Db42jDvTigw79TIqh2bwSu0B1f1xYbZQu8zAS6+t7UDED1/KyDFjIgkrDMMFJ3m261VL+4o29SHJomBR1ztlWhBPQqPsOlA+HO6PYgLdPu0StdcglLS2zU4xMzads01clYI/oa2ZagVJLlbqVf6tj3ukKOVwDFV+hBC960p5iBZ0SEkfiPSQeDno8Riz8/T5Kzz7x023xYqbMBYAOSnpmAkmwEt+5XDFIaP8eEBLbnD3e3HAXhRoslQ35kyjwaAtfyTPsCN8dDVARjUW53IQm6xlln7aWBFnZCsnAJ9F6Tdo3TxU=
+  - include:
+    - name: check-rustfmt
+      script:
+        - cargo fmt -- --check
+    - name: clippy
+      script:
+        - cargo clippy
+    - name: build
+      script:
+        - cargo build --release
+    - name: test
+      script:
+        - cargo test --release
+    - name: bench
+      script:
+        - cargo bench

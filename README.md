@@ -27,9 +27,9 @@ further away from the time being analyzed.
 
 [Documentation and Example][docs-link]
 
-### [contributing](contributing.md)
+[Contributing](contributing.md)
 
-### licensed under either of [apache-2.0](LICENSE-APACHE) ([tl;dr](https://tldrlegal.com/license/apache-license-2.0-(apache-2.0))) or [MIT](LICENSE-MIT) ([tl;dr](https://tldrlegal.com/license/mit-license)) at your option
+icensed under either of [apache-2.0](LICENSE-APACHE) ([tl;dr](https://tldrlegal.com/license/apache-license-2.0-(apache-2.0))) or [MIT](LICENSE-MIT) ([tl;dr](https://tldrlegal.com/license/mit-license)) at your option
 
 [build-image]: https://secure.travis-ci.org/snd/apodize.svg?branch=master
 [build-link]: https://travis-ci.org/snd/apodize

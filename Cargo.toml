@@ -1,7 +1,7 @@
 [package]
 name = "apodize"
 description = "simple iterators that yield generalized cosine, hanning, hamming, blackman, nuttall and triangular windows"
-version = "1.0"
+version = "1.0.0"
 authors = ["Maximilian Krüger <kruemaxi@gmail.com>"]
 license = "MIT OR Apache-2.0"
 documentation = "https://docs.rs/apodize"

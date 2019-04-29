@@ -2,12 +2,16 @@ language: rust
 rust:
   - stable
   - beta
+  - nightly
 before_script:
   - rustup component add clippy
   - rustup component add rustfmt
+matrix:
+  allow_failures:
+    - rust: nightly
 script:
   - cargo fmt -- --check
   - cargo clippy
   - cargo build --release
   - cargo test
-  - cargo bench
+  - if [ "$TRAVIS_RUST_VERSION" = "nightly" ] ; then cargo bench --verbose; fi

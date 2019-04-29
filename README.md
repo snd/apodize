@@ -38,7 +38,7 @@ Licensed under either [apache-2.0](LICENSE-APACHE) ([tl;dr](https://tldrlegal.co
 [crate-link]: https://crates.io/crates/apodize
 
 [docs-img]: https://docs.rs/apodize/badge.svg
-[docs-link]: https://docs.rs/apodize/
+[docs-link]: https://docs.rs/apodize
 
 [license-image]: https://img.shields.io/badge/license-Apache2.0/MIT-blue.svg
 [license-link]: https://github.com/snd/apodize/blob/master/LICENSE-MIT

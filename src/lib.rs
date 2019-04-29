@@ -11,16 +11,13 @@ and
 windows**
 
 useful for
-smoothing the sharp discontinuities at the edges (beginning and end)
-of each slice of samples when doing a
+smoothing the sharp discontinuities at the beginning and end
+of a slice of samples when doing a
 [short time fourier transform](https://en.wikipedia.org/wiki/Short-time_Fourier_transform).
 windowing also improves temporal resolution by making
 the signal near the time
 being analyzed have higher weight than the signal
 further away from the time being analyzed.
-
-to use add `apodize = "*"`
-to the `[dependencies]` section of your `Cargo.toml` and `extern crate apodize;` to your code.
 
 all iterators yield `f64`s.
 previously they were generic over the floating type used.
@@ -58,10 +55,11 @@ fn main() {
     // some data we want to apodize (multiply with the window)
     let data: Vec<f64> = vec![1., 2., 3., 4., 5., 6., 7.];
 
-    // multiply data with window
-    let mut windowed_data = Vec::with_capacity(data.len());
-    for i in 0..window.len() {
-        windowed_data.push(window[i] * data[i]);
+    // buffer that will hold data * window
+    let mut windowed_data = vec![0.; data.len()];
+
+    for (windowed, (window, data)) in windowed_data.iter_mut().zip(window.iter().zip(data.iter())) {
+        *windowed = *window * *data;
     }
 
     let expected = vec![

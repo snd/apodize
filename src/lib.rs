@@ -11,16 +11,13 @@ and
 windows**
 
 useful for
-smoothing the sharp discontinuities at the edges (beginning and end)
-of each slice of samples when doing a
+smoothing the sharp discontinuities at the beginning and end
+of a slice of samples when doing a
 [short time fourier transform](https://en.wikipedia.org/wiki/Short-time_Fourier_transform).
 windowing also improves temporal resolution by making
 the signal near the time
 being analyzed have higher weight than the signal
 further away from the time being analyzed.
-
-to use add `apodize = "*"`
-to the `[dependencies]` section of your `Cargo.toml` and `extern crate apodize;` to your code.
 
 all iterators yield `f64`s.
 previously they were generic over the floating type used.
@@ -38,8 +35,6 @@ here is an example of that for a hanning window (hamming, blackman and nuttall a
 ```
 #[macro_use]
 extern crate approx;
-
-extern crate apodize;
 
 fn main() {
     // create a hanning window iterator of size 7
@@ -60,10 +55,11 @@ fn main() {
     // some data we want to apodize (multiply with the window)
     let data: Vec<f64> = vec![1., 2., 3., 4., 5., 6., 7.];
 
-    // multiply data with window
-    let mut windowed_data = Vec::with_capacity(data.len());
-    for i in 0..window.len() {
-        windowed_data.push(window[i] * data[i]);
+    // buffer that will hold data * window
+    let mut windowed_data = vec![0.; data.len()];
+
+    for (windowed, (window, data)) in windowed_data.iter_mut().zip(window.iter().zip(data.iter())) {
+        *windowed = *window * *data;
     }
 
     let expected = vec![
@@ -135,14 +131,7 @@ impl ExactSizeIterator for CosineWindowIter {
 /// # Panics
 /// panics unless `1 < size`
 #[inline]
-pub fn cosine_at(
-    a: f64,
-    b: f64,
-    c: f64,
-    d: f64,
-    size: usize,
-    index: usize,
-) -> f64 {
+pub fn cosine_at(a: f64, b: f64, c: f64, d: f64, size: usize, index: usize) -> f64 {
     let x = (PI * index as f64) / (size - 1) as f64;
     let b_ = b * (2. * x).cos();
     let c_ = c * (4. * x).cos();
@@ -155,21 +144,15 @@ pub fn cosine_at(
 /// with the coefficients `a`, `b`, `c` and `d`
 /// # Panics
 /// panics unless `1 < size`
-pub fn cosine_iter(
-    a: f64,
-    b: f64,
-    c: f64,
-    d: f64,
-    size: usize,
-) -> CosineWindowIter {
+pub fn cosine_iter(a: f64, b: f64, c: f64, d: f64, size: usize) -> CosineWindowIter {
     assert!(1 < size);
     CosineWindowIter {
-        a: a,
-        b: b,
-        c: c,
-        d: d,
+        a,
+        b,
+        c,
+        d,
         index: 0,
-        size: size,
+        size,
     }
 }
 
@@ -202,7 +185,7 @@ pub fn blackman_iter(size: usize) -> CosineWindowIter {
 /// # Panics
 /// panics unless `1 < size`
 pub fn nuttall_iter(size: usize) -> CosineWindowIter {
-    cosine_iter(0.355768, 0.487396, 0.144232, 0.012604, size)
+    cosine_iter(0.355_768, 0.487_396, 0.144_232, 0.012_604, size)
 }
 
 /// holds the iteration state of an iterator for a triangular window
@@ -266,7 +249,7 @@ pub fn triangular_iter(size: usize) -> TriangularWindowIter {
     assert!(0 < size);
     TriangularWindowIter {
         l: size,
-        size: size,
+        size,
         index: 0,
     }
 }

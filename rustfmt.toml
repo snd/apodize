@@ -1,8 +1,0 @@
-max_width = 75
-ideal_width = 75
-reorder_imports = true
-newline_style = "Unix"
-_fn_args_layout = "Block"
-_fn_arg_indent = "Tabbed"
-fn_args_paren_newline = false
-normalise_comments = false

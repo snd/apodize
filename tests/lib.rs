@@ -118,8 +118,7 @@ fn test_blackman() {
     );
 
     let actual = apodize::blackman_iter(3).collect::<Vec<f64>>();
-    let expected =
-        vec![0.000060000000000004494, 1.0, 0.000060000000000004494];
+    let expected = vec![0.000060000000000004494, 1.0, 0.000060000000000004494];
     assert_ulps_eq!(
         actual.as_slice(),
         expected.as_slice(),
@@ -152,19 +151,11 @@ fn test_nuttall() {
 
     let actual = apodize::nuttall_iter(2).collect::<Vec<f64>>();
     let expected = vec![0.0, 0.0];
-    assert_abs_diff_eq!(
-        actual.as_slice(),
-        expected.as_slice(),
-        epsilon = epsilon
-    );
+    assert_abs_diff_eq!(actual.as_slice(), expected.as_slice(), epsilon = epsilon);
 
     let actual = apodize::nuttall_iter(3).collect::<Vec<f64>>();
     let expected = vec![0.0, 1.0, 0.0];
-    assert_abs_diff_eq!(
-        actual.as_slice(),
-        expected.as_slice(),
-        epsilon = epsilon
-    );
+    assert_abs_diff_eq!(actual.as_slice(), expected.as_slice(), epsilon = epsilon);
 
     let actual = apodize::nuttall_iter(10).collect::<Vec<f64>>();
     let expected = vec![
@@ -179,11 +170,7 @@ fn test_nuttall() {
         0.013748631,
         0.0,
     ];
-    assert_abs_diff_eq!(
-        actual.as_slice(),
-        expected.as_slice(),
-        epsilon = epsilon
-    );
+    assert_abs_diff_eq!(actual.as_slice(), expected.as_slice(), epsilon = epsilon);
 }
 
 #[test]

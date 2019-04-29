@@ -11,7 +11,7 @@ matrix:
     - rust: nightly
 script:
   - cargo fmt -- --check
-  - cargo clippy
+  - cargo clippy -- -D warnings
   - cargo build --release
   - cargo test
   - if [ "$TRAVIS_RUST_VERSION" = "nightly" ] ; then cargo bench --verbose; fi

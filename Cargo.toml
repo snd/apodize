@@ -1,15 +1,21 @@
 [package]
 name = "apodize"
-description = "simple iterators that yield generalized cosine, hanning, hamming, blackman, nuttall and triangular windows"
 version = "1.0.0"
 authors = ["Maximilian Krüger <kruemaxi@gmail.com>"]
-license = "MIT OR Apache-2.0"
+edition = "2018"
+
+# metadata
 documentation = "https://docs.rs/apodize"
+description = "simple iterators that yield generalized cosine, hanning, hamming, blackman, nuttall and triangular windows"
+license = "MIT OR Apache-2.0"
 homepage = "https://github.com/snd/apodize"
 repository = "https://github.com/snd/apodize.git"
 readme = "README.md"
 keywords = ["iterator", "window", "hanning", "hamming", "blackman"]
-edition = "2018"
 
 [dev-dependencies]
 approx = "0.3.2"
+
+[badges]
+travis-ci = { repository = "snd/apodize" }
+maintenance = { status = "passively-maintained" }

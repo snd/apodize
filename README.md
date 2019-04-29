@@ -5,7 +5,7 @@
 [![Docs][docs-img]][docs-link]
 [![License][license-image]][license-link]
 
-very simple [rust](https://www.rust-lang.org/)
+Very simple [rust](https://www.rust-lang.org/)
 iterators that yield
 [generalized cosine](https://snd.github.io/apodize/apodize/fn.cosine_iter.html),
 [hanning](https://snd.github.io/apodize/apodize/fn.hanning_iter.html),
@@ -16,7 +16,7 @@ and
 [triangular](https://snd.github.io/apodize/apodize/fn.triangular_iter.html)
 windows
 
-useful for
+Useful for
 smoothing the sharp discontinuities at the beginning and end
 of a slice of samples when doing a
 [short time fourier transform](https://en.wikipedia.org/wiki/Short-time_Fourier_transform).
@@ -29,7 +29,7 @@ further away from the time being analyzed.
 
 [Read before contributing](contributing.md)
 
-licensed under either [apache-2.0](LICENSE-APACHE) ([tl;dr](https://tldrlegal.com/license/apache-license-2.0-(apache-2.0))) or [MIT](LICENSE-MIT) ([tl;dr](https://tldrlegal.com/license/mit-license)) at your option
+Licensed under either [apache-2.0](LICENSE-APACHE) ([tl;dr](https://tldrlegal.com/license/apache-license-2.0-(apache-2.0))) or [MIT](LICENSE-MIT) ([tl;dr](https://tldrlegal.com/license/mit-license)) at your option
 
 [build-image]: https://secure.travis-ci.org/snd/apodize.svg?branch=master
 [build-link]: https://travis-ci.org/snd/apodize

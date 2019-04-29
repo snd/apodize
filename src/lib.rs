@@ -149,12 +149,12 @@ pub fn cosine_at(a: f64, b: f64, c: f64, d: f64, size: usize, index: usize) -> f
 pub fn cosine_iter(a: f64, b: f64, c: f64, d: f64, size: usize) -> CosineWindowIter {
     assert!(1 < size);
     CosineWindowIter {
-        a: a,
-        b: b,
-        c: c,
-        d: d,
+        a,
+        b,
+        c,
+        d,
         index: 0,
-        size: size,
+        size,
     }
 }
 
@@ -187,7 +187,7 @@ pub fn blackman_iter(size: usize) -> CosineWindowIter {
 /// # Panics
 /// panics unless `1 < size`
 pub fn nuttall_iter(size: usize) -> CosineWindowIter {
-    cosine_iter(0.355768, 0.487396, 0.144232, 0.012604, size)
+    cosine_iter(0.355_768, 0.487_396, 0.144_232, 0.012_604, size)
 }
 
 /// holds the iteration state of an iterator for a triangular window
@@ -251,7 +251,7 @@ pub fn triangular_iter(size: usize) -> TriangularWindowIter {
     assert!(0 < size);
     TriangularWindowIter {
         l: size,
-        size: size,
+        size,
         index: 0,
     }
 }

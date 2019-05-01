@@ -1,5 +1,3 @@
-extern crate apodize;
-
 #[macro_use]
 extern crate approx;
 

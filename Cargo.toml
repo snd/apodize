@@ -19,3 +19,6 @@ approx = "0.3.2"
 [badges]
 travis-ci = { repository = "snd/apodize" }
 maintenance = { status = "passively-maintained" }
+
+[dependencies]
+libm = "0.2.1"

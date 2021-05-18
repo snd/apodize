@@ -76,7 +76,9 @@ fn main() {
 ```
 */
 
-use std::f64::consts::PI;
+#![no_std]
+
+use core::f64::consts::PI;
 
 /// holds the window coefficients and
 /// iteration state of an iterator for a cosine window
@@ -133,9 +135,9 @@ impl ExactSizeIterator for CosineWindowIter {
 #[inline]
 pub fn cosine_at(a: f64, b: f64, c: f64, d: f64, size: usize, index: usize) -> f64 {
     let x = (PI * index as f64) / (size - 1) as f64;
-    let b_ = b * (2. * x).cos();
-    let c_ = c * (4. * x).cos();
-    let d_ = d * (6. * x).cos();
+    let b_ = b * libm::cos(2. * x);
+    let c_ = c * libm::cos(4. * x);
+    let d_ = d * libm::cos(6. * x);
     (a - b_) + (c_ - d_)
 }
 
@@ -208,7 +210,7 @@ pub fn triangular_at(l: usize, size: usize, index: usize) -> f64 {
     // ends with zeros if l == size - 1
     // if l == size - 1 && index == 0 then 1 - 1 / 1 == 0
     // if l == size - 1 && index == size - 1 then 1 - 0 / 1 == 0
-    1. - ((index as f64 - (size - 1) as f64 / 2.) / (l as f64 / 2.)).abs()
+    1. - libm::fabs((index as f64 - (size - 1) as f64 / 2.) / (l as f64 / 2.))
 }
 
 impl Iterator for TriangularWindowIter {
